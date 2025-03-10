@@ -1,17 +1,12 @@
-import {} from 'react';
-import axios from 'axios';
+import Header from './components/Header/header';
+import './App.css';
+import AppRoutes from "./routes/AppRoutes";
 
-
-import Header from './components/Header/header'
-import './App.css'
-import './services/api';
-
-
-
-const App = () => {
+function App() {
   return (
     <div className="app">
       <Header />
+      <AppRoutes />
     </div>
   );
 };
