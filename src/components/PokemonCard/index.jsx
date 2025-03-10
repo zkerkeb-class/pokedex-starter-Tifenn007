@@ -11,7 +11,6 @@ const PokemonCard = ({ name, types, image, attack, defense, hp }) => {
     }
   }, [currentHP]);
 
-  console.log("🚀 ~ PokemonCard ~ types:", types);
 
   return (
     <div className="pokemon-card">
@@ -39,7 +38,6 @@ const PokemonCard = ({ name, types, image, attack, defense, hp }) => {
         </div>
       </div>
       <button className="pokemon-attack-button" onClick={() => {
-        console.log("🚀 ~ bulbizard se mange une patate");
         setCurrentHP(currentHP - 10);
       }}>
         Attaque
