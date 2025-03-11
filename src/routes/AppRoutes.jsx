@@ -9,7 +9,7 @@ function AppRoutes() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/pokemon/:id" element={<PokemonDetailPage />} />
+        <Route path="/pokemons/:id" element={<PokemonDetailPage />} />
         <Route path="/create" element={<CreatePokemonPage />} />
         <Route path="/edit/:id" element={<EditPokemonPage />} />
       </Routes>

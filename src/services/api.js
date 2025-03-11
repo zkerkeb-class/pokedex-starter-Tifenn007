@@ -6,8 +6,9 @@ const api = axios.create({
 
 export const getAllPokemons = async () => {
   try {
-    const response = await api.get('/pokemons'); // Assurez-vous que l'endpoint est correct
-    return response.data; // Renvoie directement le tableau de Pokémon
+    const response = await api.get('/pokemons');
+    console.log("API Response:", response.data); // Debug: Vérifie la structure de la réponse
+    return response.data;
   } catch (error) {
     console.error('Error fetching all pokemons:', error);
     throw error;
@@ -15,15 +16,15 @@ export const getAllPokemons = async () => {
 };
 
 
-export const getPokemonById = async (id) => {
-  try {
-    const response = await api.get(`/pokemons/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching pokemon with id ${id}:`, error);
-    throw error;
-  }
+export const getPokemonById = (id) => {
+  return fetch(`http://localhost:3000/api/pokemons/${id}`)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching pokemon data:", error);
+      throw error;
+    });
 };
+
 
 export const createPokemon = async (data) => {
   try {
