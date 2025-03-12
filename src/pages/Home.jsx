@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllPokemons } from '../services/api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function HomePage() {
+  const navigate = useNavigate();
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,6 +33,7 @@ function HomePage() {
   return (
     <div>
       <h1>Pokémon List</h1>
+      <button onClick={() => navigate('/create')}>Create New Pokémon</button>
       <ul>
   {pokemons.map((pokemon, index) => (
     pokemon?.name?.english ? ( // Vérifie que `name` et `name.english` existent

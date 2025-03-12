@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPokemon, getAllPokemons } from '../services/api';
 
 const CreatePokemonPage = () => {
   const [formData, setFormData] = useState({
-    id: '', // L'ID sera saisi par l'utilisateur
+    id: '', // L'ID sera généré automatiquement
     name: {
       english: '',
       japanese: '',
@@ -20,47 +20,67 @@ const CreatePokemonPage = () => {
       'Sp. Defense': 0,
       Speed: 0,
     },
+    image: '',
   });
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchPokemons = async () => {
+      try {
+        const response = await getAllPokemons();
+        console.log('API response:', response); // Ajoutez ce message de débogage
+        const pokemons = response.pokemons; // Utilisez la propriété correcte
+        const maxId = Math.max(...pokemons.map(pokemon => pokemon.id));
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          id: maxId + 1, // Générer un nouvel ID
+        }));
+      } catch (error) {
+        console.error('Error fetching pokemons:', error);
+        setError('Failed to fetch Pokémon data.');
+      }
+    };
+
+    fetchPokemons();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    // Validation de l'ID
-    if (!formData.id || isNaN(formData.id)) {
-      setError('Please enter a valid ID (must be a number).');
-      setLoading(false);
-      return;
-    }
-
     try {
-      // Vérifier si l'ID existe déjà
-      const response = await getAllPokemons();
-      console.log('Pokemons:', response); // Afficher la réponse de getAllPokemons
-      if (!Array.isArray(response.pokemon)) {
-        throw new Error('Expected an array of Pokémon, but got something else.');
-      }
-      const idExists = response.pokemon.some((pokemon) => pokemon.id === parseInt(formData.id));
-      if (idExists) {
-        setError('This ID already exists. Please choose a different ID.');
-        setLoading(false);
-        return;
-      }
-
       // Envoyer les données du formulaire à l'API
-      console.log('Data being sent:', formData);
       await createPokemon(formData);
-      navigate('/');
+      navigate(`/pokemons/${formData.id}`);
     } catch (error) {
       console.error('Error creating pokemon:', error);
       setError('Failed to create Pokémon. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    const [field, subfield] = name.split('.'); // Handling nested fields like "base.HP"
+
+    if (subfield) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [field]: {
+          ...prevState[field],
+          [subfield]: value
+        }
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [field]: value
+      }));
     }
   };
 
@@ -75,69 +95,49 @@ const CreatePokemonPage = () => {
           type="number"
           placeholder="ID"
           value={formData.id}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              id: e.target.value,
-            })
-          }
+          readOnly
         />
 
         <h2>Names</h2>
         <input
           type="text"
           placeholder="English Name"
+          name="name.english"
           value={formData.name.english}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              name: { ...formData.name, english: e.target.value },
-            })
-          }
+          onChange={handleInputChange}
         />
         <input
           type="text"
           placeholder="Japanese Name"
+          name="name.japanese"
           value={formData.name.japanese}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              name: { ...formData.name, japanese: e.target.value },
-            })
-          }
+          onChange={handleInputChange}
         />
         <input
           type="text"
           placeholder="Chinese Name"
+          name="name.chinese"
           value={formData.name.chinese}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              name: { ...formData.name, chinese: e.target.value },
-            })
-          }
+          onChange={handleInputChange}
         />
         <input
           type="text"
           placeholder="French Name"
+          name="name.french"
           value={formData.name.french}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              name: { ...formData.name, french: e.target.value },
-            })
-          }
+          onChange={handleInputChange}
         />
 
         <h2>Types</h2>
         <input
           type="text"
           placeholder="Type (comma-separated, e.g., Grass,Poison)"
+          name="type"
           value={formData.type.join(',')}
           onChange={(e) =>
             setFormData({
               ...formData,
-              type: e.target.value.split(','),
+              type: e.target.value.split(',').map((item) => item.trim()),
             })
           }
         />
@@ -146,73 +146,60 @@ const CreatePokemonPage = () => {
         <input
           type="number"
           placeholder="HP"
+          name="base.HP"
           value={formData.base.HP}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              base: { ...formData.base, HP: parseInt(e.target.value) },
-            })
-          }
+          onChange={handleInputChange}
         />
         <input
           type="number"
           placeholder="Attack"
+          name="base.Attack"
           value={formData.base.Attack}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              base: { ...formData.base, Attack: parseInt(e.target.value) },
-            })
-          }
+          onChange={handleInputChange}
         />
         <input
           type="number"
           placeholder="Defense"
+          name="base.Defense"
           value={formData.base.Defense}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              base: { ...formData.base, Defense: parseInt(e.target.value) },
-            })
-          }
+          onChange={handleInputChange}
         />
         <input
           type="number"
           placeholder="Sp. Attack"
+          name="base['Sp. Attack']"
           value={formData.base['Sp. Attack']}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              base: { ...formData.base, 'Sp. Attack': parseInt(e.target.value) },
-            })
-          }
+          onChange={handleInputChange}
         />
         <input
           type="number"
           placeholder="Sp. Defense"
+          name="base['Sp. Defense']"
           value={formData.base['Sp. Defense']}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              base: { ...formData.base, 'Sp. Defense': parseInt(e.target.value) },
-            })
-          }
+          onChange={handleInputChange}
         />
         <input
           type="number"
           placeholder="Speed"
+          name="base.Speed"
           value={formData.base.Speed}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              base: { ...formData.base, Speed: parseInt(e.target.value) },
-            })
-          }
+          onChange={handleInputChange}
+        />
+
+        <h2>Image URL</h2>
+        <input
+          type="text"
+          placeholder="Image URL"
+          name="image"
+          value={formData.image}
+          onChange={handleInputChange}
         />
 
         <button type="submit" disabled={loading}>
           {loading ? 'Creating...' : 'Create'}
         </button>
+        <button type="button" onClick={() => navigate(`/`)}>Cancel</button>
+  
       </form>
     </div>
   );

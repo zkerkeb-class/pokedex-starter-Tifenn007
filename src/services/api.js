@@ -15,7 +15,6 @@ export const getAllPokemons = async () => {
   }
 };
 
-
 export const getPokemonById = (id) => {
   return fetch(`http://localhost:3000/api/pokemons/${id}`)
     .then(response => response.json())
