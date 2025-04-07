@@ -4,21 +4,21 @@ import { createPokemon, getAllPokemons } from '../services/api';
 
 const CreatePokemonPage = () => {
   const [formData, setFormData] = useState({
-    id: '', // L'ID sera généré automatiquement
+    id: '',
     name: {
       english: '',
       japanese: '',
       chinese: '',
       french: '',
     },
-    type: [],
-    base: {
-      HP: 0,
-      Attack: 0,
-      Defense: 0,
-      'Sp. Attack': 0,
-      'Sp. Defense': 0,
-      Speed: 0,
+    types: [],
+    stats: {
+      hp: 0,
+      attack: 0,
+      defense: 0,
+      specialAttack: 0,
+      specialDefense: 0,
+      speed: 0,
     },
     image: '',
   });
@@ -31,16 +31,15 @@ const CreatePokemonPage = () => {
     const fetchPokemons = async () => {
       try {
         const response = await getAllPokemons();
-        console.log('API response:', response); // Ajoutez ce message de débogage
-        const pokemons = response.pokemons; // Utilisez la propriété correcte
-        const maxId = Math.max(...pokemons.map(pokemon => pokemon.id));
-        setFormData(prevFormData => ({
-          ...prevFormData,
-          id: maxId + 1, // Générer un nouvel ID
+        const pokemons = response.pokemons;
+        const maxId = Math.max(...pokemons.map(p => p.id));
+        setFormData(prev => ({
+          ...prev,
+          id: maxId + 1,
         }));
       } catch (error) {
-        console.error('Error fetching pokemons:', error);
-        setError('Failed to fetch Pokémon data.');
+        console.error('Erreur fetch pokémons :', error);
+        setError("Impossible de récupérer les pokémons");
       }
     };
 
@@ -53,12 +52,11 @@ const CreatePokemonPage = () => {
     setError(null);
 
     try {
-      // Envoyer les données du formulaire à l'API
       await createPokemon(formData);
       navigate(`/pokemons/${formData.id}`);
     } catch (error) {
-      console.error('Error creating pokemon:', error);
-      setError('Failed to create Pokémon. Please try again.');
+      console.error('Erreur création Pokémon :', error);
+      setError('Échec lors de la création du Pokémon');
     } finally {
       setLoading(false);
     }
@@ -66,140 +64,118 @@ const CreatePokemonPage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const [field, subfield] = name.split('.'); // Handling nested fields like "base.HP"
 
-    if (subfield) {
-      setFormData((prevState) => ({
-        ...prevState,
-        [field]: {
-          ...prevState[field],
-          [subfield]: value
-        }
+    if (name.startsWith('name.')) {
+      const key = name.split('.')[1];
+      setFormData(prev => ({
+        ...prev,
+        name: { ...prev.name, [key]: value },
+      }));
+    } else if (name.startsWith('stats.')) {
+      const key = name.split('.')[1];
+      setFormData(prev => ({
+        ...prev,
+        stats: { ...prev.stats, [key]: Number(value) },
       }));
     } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        [field]: value
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
       }));
     }
   };
 
   return (
     <div>
-      <h1>Create Pokémon</h1>
+      <h1>Créer un Pokémon</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        {/* Champ de saisie pour l'ID */}
         <h2>ID</h2>
-        <input
-          type="number"
-          placeholder="ID"
-          value={formData.id}
-          readOnly
-        />
+        <input type="number" value={formData.id} readOnly />
 
-        <h2>Names</h2>
-        <input
-          type="text"
-          placeholder="English Name"
-          name="name.english"
-          value={formData.name.english}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          placeholder="Japanese Name"
-          name="name.japanese"
-          value={formData.name.japanese}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          placeholder="Chinese Name"
-          name="name.chinese"
-          value={formData.name.chinese}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          placeholder="French Name"
-          name="name.french"
-          value={formData.name.french}
-          onChange={handleInputChange}
-        />
+        <h2>Noms</h2>
+        {['english', 'japanese', 'chinese', 'french'].map((lang) => (
+          <input
+            key={lang}
+            type="text"
+            placeholder={`Nom en ${lang}`}
+            name={`name.${lang}`}
+            value={formData.name[lang]}
+            onChange={handleInputChange}
+          />
+        ))}
 
         <h2>Types</h2>
         <input
           type="text"
-          placeholder="Type (comma-separated, e.g., Grass,Poison)"
-          name="type"
-          value={formData.type.join(',')}
+          name="types"
+          placeholder="ex: Grass, Poison"
+          value={formData.types.join(',')}
           onChange={(e) =>
             setFormData({
               ...formData,
-              type: e.target.value.split(',').map((item) => item.trim()),
+              types: e.target.value.split(',').map(t => t.trim()),
             })
           }
         />
 
-        <h2>Base Stats</h2>
+        <h2>Stats</h2>
         <input
           type="number"
+          name="stats.hp"
           placeholder="HP"
-          name="base.HP"
-          value={formData.base.HP}
+          value={formData.stats.hp}
           onChange={handleInputChange}
         />
         <input
           type="number"
+          name="stats.attack"
           placeholder="Attack"
-          name="base.Attack"
-          value={formData.base.Attack}
+          value={formData.stats.attack}
           onChange={handleInputChange}
         />
         <input
           type="number"
+          name="stats.defense"
           placeholder="Defense"
-          name="base.Defense"
-          value={formData.base.Defense}
+          value={formData.stats.defense}
           onChange={handleInputChange}
         />
         <input
           type="number"
-          placeholder="Sp. Attack"
-          name="base['Sp. Attack']"
-          value={formData.base['Sp. Attack']}
+          name="stats.specialAttack"
+          placeholder="Special Attack"
+          value={formData.stats.specialAttack}
           onChange={handleInputChange}
         />
         <input
           type="number"
-          placeholder="Sp. Defense"
-          name="base['Sp. Defense']"
-          value={formData.base['Sp. Defense']}
+          name="stats.specialDefense"
+          placeholder="Special Defense"
+          value={formData.stats.specialDefense}
           onChange={handleInputChange}
         />
         <input
           type="number"
+          name="stats.speed"
           placeholder="Speed"
-          name="base.Speed"
-          value={formData.base.Speed}
+          value={formData.stats.speed}
           onChange={handleInputChange}
         />
 
-        <h2>Image URL</h2>
+        <h2>Image</h2>
         <input
           type="text"
-          placeholder="Image URL"
           name="image"
+          placeholder="Image URL"
           value={formData.image}
           onChange={handleInputChange}
         />
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Creating...' : 'Create'}
+          {loading ? 'Création en cours...' : 'Créer'}
         </button>
-        <button type="button" onClick={() => navigate(`/`)}>Cancel</button>
-  
+        <button type="button" onClick={() => navigate('/')}>Annuler</button>
       </form>
     </div>
   );

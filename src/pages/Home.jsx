@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getAllPokemons } from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
+import './Home.css';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -11,7 +12,6 @@ function HomePage() {
   useEffect(() => {
     getAllPokemons()
       .then(response => {
-        console.log("Received data:", response);
         if (!response || !Array.isArray(response)) {
           throw new Error("Invalid API response format");
         }
@@ -36,7 +36,6 @@ function HomePage() {
       </button>
       <div className="pokemon-grid">
         {pokemons.map((pokemon) => {
-          console.log("Image URL:", pokemon.image); // Affiche l'URL de l'image dans la console
           return (
             <div key={pokemon._id} className="pokemon-card">  
             <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />

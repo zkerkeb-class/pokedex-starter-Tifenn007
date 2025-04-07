@@ -1,11 +1,43 @@
+/* Header en mode plein écran */
 .header {
-    width: 100%;
-    position:fixed; 
-    top: 0;
-    left: 0;
-    background-color: #282c34;
-    padding: 10px 0;
-    color: white;
-    font-size: 10px;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80vh; /* Hauteur de l'image de fond au début */
+  background: url('../../assets/screen2.jpg') no-repeat center center/cover; /* Image de fond */
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement */
+  transition: height 0.3s ease, background-color 0.3s ease;
+  z-index: 1000;
+  overflow: hidden; /* Empêche le débordement */
+}
+
+/* Image du logo */
+.PokeEmpire {
+  width: 200px; /* Taille initiale du logo */
+  height: auto;
+  position: absolute; /* Position absolue pour un placement précis */
+  top: 50%; /* Position initiale du logo */
+  left: 50%; /* Centre horizontalement */
+  transform: translate(-50%, -50%); /* Centrage parfait du logo */
+}
+
+/* Header rétréci lors du scroll */
+.header.scrolled {
+  height: 80px; /* Hauteur réduite du header */
+  background-color: #333; /* Couleur de fond du header lorsqu'on scrolle */
+  background: none; /* Supprime l'image de fond */
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement */
+  padding-top: 0; /* Supprime l'espace en haut */
+}
+
+/* Logo réduit dans le header rétréci */
+.header.scrolled .PokeEmpire {
+  width: 120px; /* Taille réduite du logo */
+  top: 20px; /* Position réduite du logo */
+  transform: translate(-50%, 0); /* Centrage horizontal, position verticale ajustée */
+}

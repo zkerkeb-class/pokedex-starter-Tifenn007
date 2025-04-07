@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getPokemonById, deletePokemon } from '../services/api';
 
 const PokemonDetailPage = () => {
-  const { id: paramId } = useParams(); // Renommé pour plus de clarté
+  const { id: paramId } = useParams();
   const navigate = useNavigate();
   const [pokemon, setPokemon] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,8 +19,7 @@ const PokemonDetailPage = () => {
         if (!response) {
           throw new Error('Pokémon introuvable');
         }
-        setPokemon(response); // Assurez-vous que response contient les détails du Pokémon
-        console.log("Détails du Pokémon :", response); // Debug : Affiche les infos du Pokémon
+        setPokemon(response);
       } catch (error) {
         console.error(`Erreur lors de la récupération du Pokémon avec l'id ${paramId} :`, error);
         setError(error);
@@ -60,13 +59,13 @@ const PokemonDetailPage = () => {
       <p>Chinois : {pokemon.name?.chinese || 'Inconnu'}</p>
       <p>Français : {pokemon.name?.french || 'Inconnu'}</p>
       <img src={pokemon.image || '/default-image.png'} alt={pokemon.name?.english || 'Pokemon'} />
-      <p>Type : {Array.isArray(pokemon.type) ? pokemon.type.join(', ') : 'Inconnu'}</p>
-      <p>HP : {pokemon.base?.HP || 'Inconnu'}</p>
-      <p>Attaque : {pokemon.base?.Attack || 'Inconnu'}</p>
-      <p>Défense : {pokemon.base?.Defense || 'Inconnu'}</p>
-      <p>Attaque Spéciale : {pokemon.base?.['Sp. Attack'] || 'Inconnu'}</p>
-      <p>Défense Spéciale : {pokemon.base?.['Sp. Defense'] || 'Inconnu'}</p>
-      <p>Vitesse : {pokemon.base?.Speed || 'Inconnu'}</p>
+      <p>Type : {Array.isArray(pokemon.types) ? pokemon.types.join(', ') : 'Inconnu'}</p>
+      <p>HP : {pokemon.stats?.hp || 'Inconnu'}</p>
+      <p>Attaque : {pokemon.stats?.attack || 'Inconnu'}</p>
+      <p>Défense : {pokemon.stats?.defense || 'Inconnu'}</p>
+      <p>Attaque Spéciale : {pokemon.stats?.specialAttack || 'Inconnu'}</p>
+      <p>Défense Spéciale : {pokemon.stats?.specialDefense || 'Inconnu'}</p>
+      <p>Vitesse : {pokemon.stats?.speed || 'Inconnu'}</p>
       <button onClick={handleDelete}>Supprimer le Pokémon</button>
       <button onClick={() => navigate(`/edit/${paramId}`)}>Modifier le Pokémon</button>
       <button type="button" onClick={() => navigate(`/`)}>Annuler</button>

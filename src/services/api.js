@@ -4,6 +4,7 @@ const api = axios.create({
   baseURL: 'http://localhost:3000/api', // Remplacez par l'URL de votre API
 });
 
+
 export const getAllPokemons = async () => {
   try {
     const response = await api.get('/pokemons');
@@ -15,13 +16,14 @@ export const getAllPokemons = async () => {
   }
 };
 
-export const getPokemonById = async (id) => {
+export const getPokemonById = async (_id) => {
   try {
-    const response = await api.get(`/pokemons/${id}`);
-    console.log("Réponse de l'API pour getPokemonById :", response.data); // Vérifiez la structure des données
-    return response.data; // Assurez-vous que response.data contient les détails du Pokémon
+    console.log("Appel API avec l'ID :", _id); // Debug : Vérifiez l'ID envoyé à l'API
+    const response = await api.get(`/pokemons/${_id}`);
+    console.log("Réponse de l'API :", response.data); // Debug : Vérifiez la réponse
+    return response.data;
   } catch (error) {
-    console.error(`Erreur lors de la récupération du Pokémon avec l'id ${id} :`, error);
+    console.error(`Erreur lors de la récupération du Pokémon avec l'id ${_id} :`, error);
     throw error;
   }
 };
