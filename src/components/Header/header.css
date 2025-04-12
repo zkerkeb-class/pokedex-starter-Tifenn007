@@ -9,7 +9,6 @@
   display: flex;
   justify-content: center; /* Centre horizontalement */
   align-items: center; /* Centre verticalement */
-  transition: height 0.3s ease, background-color 0.3s ease;
   z-index: 1000;
   overflow: hidden; /* Empêche le débordement */
 }
@@ -22,22 +21,45 @@
   top: 50%; /* Position initiale du logo */
   left: 50%; /* Centre horizontalement */
   transform: translate(-50%, -50%); /* Centrage parfait du logo */
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Header rétréci lors du scroll */
-.header.scrolled {
-  height: 80px; /* Hauteur réduite du header */
-  background-color: #333; /* Couleur de fond du header lorsqu'on scrolle */
-  background: none; /* Supprime l'image de fond */
+/* Conteneur des boutons d'authentification */
+.auth-buttons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
   display: flex;
-  justify-content: center; /* Centre horizontalement */
-  align-items: center; /* Centre verticalement */
-  padding-top: 0; /* Supprime l'espace en haut */
+  gap: 10px;
+  z-index: 1001;
 }
 
-/* Logo réduit dans le header rétréci */
-.header.scrolled .PokeEmpire {
-  width: 120px; /* Taille réduite du logo */
-  top: 20px; /* Position réduite du logo */
-  transform: translate(-50%, 0); /* Centrage horizontal, position verticale ajustée */
+/* Style des boutons d'authentification */
+.auth-button {
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.login-button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.login-button:hover {
+  background-color: white;
+  color: #333;
+}
+
+.register-button {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.register-button:hover {
+  background-color: #ff3333;
 }

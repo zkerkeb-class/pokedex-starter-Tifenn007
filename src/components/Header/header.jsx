@@ -1,40 +1,68 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion"; // Import Framer Motion
+import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import PokeEmpire from "../../assets/PokeEmpire.png";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0); // Vérifie si on a scrollé
+      setIsScrolled(window.scrollY > 0);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <motion.header
       className="header"
       animate={{
-        height: isScrolled ? "80px" : "80vh", // Hauteur réduite lors du scroll
-        backgroundColor: isScrolled ? "#333" : "transparent", // Changement de couleur de fond
+        height: isScrolled ? "120px" : "80vh",
+        backgroundColor: isScrolled ? "rgba(51, 51, 51, 0.8)" : "transparent",
       }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
     >
       <motion.img
         src={PokeEmpire}
         alt="PokeEmpire"
         className="PokeEmpire"
         animate={{
-          width: isScrolled ? "120px" : "200px", // Taille du logo réduite
-          top: isScrolled ? "20px" : "50px", // Descend légèrement le logo pour le rendre plus visible
-          transform: isScrolled ? "translate(-50%, 0)" : "translate(-50%, -50%)", // Centrage du logo
+          width: isScrolled ? "180px" : "200px",
+          top: isScrolled ? "30px" : "50px",
+          transform: isScrolled ? "translate(-50%, 0)" : "translate(-50%, -50%)",
         }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
+        transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
       />
+      <div className="auth-buttons">
+        {user ? (
+          <>
+            <span className="user-email">{user.email}</span>
+            <button className="auth-button logout-button" onClick={handleLogout}>
+              Déconnexion
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login">
+              <button className="auth-button login-button">Connexion</button>
+            </Link>
+            <Link to="/register">
+              <button className="auth-button register-button">Inscription</button>
+            </Link>
+          </>
+        )}
+      </div>
     </motion.header>
   );
 };
