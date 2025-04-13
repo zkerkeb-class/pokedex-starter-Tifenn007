@@ -33,17 +33,55 @@ const Header = () => {
       }}
       transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
     >
-      <motion.img
-        src={PokeEmpire}
-        alt="PokeEmpire"
-        className="PokeEmpire"
-        animate={{
-          width: isScrolled ? "180px" : "200px",
-          top: isScrolled ? "30px" : "50px",
-          transform: isScrolled ? "translate(-50%, 0)" : "translate(-50%, -50%)",
-        }}
-        transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-      />
+      <div className="header-content">
+        <motion.img
+          src={PokeEmpire}
+          alt="PokeEmpire"
+          className="PokeEmpire"
+          animate={{
+            width: isScrolled ? "180px" : "200px",
+            top: isScrolled ? "30px" : "50px",
+            transform: isScrolled ? "translate(-50%, 0)" : "translate(-50%, -50%)",
+          }}
+          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+        />
+        
+        {!isScrolled && (
+          <motion.div 
+            className="header-text"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          >
+            <h1 className="welcome-title">Bienvenue sur PokeEmpire</h1>
+            <p className="header-description">
+              Découvrez le monde fascinant des Pokémon. Explorez notre Pokédex complet, 
+              apprenez-en davantage sur chaque créature et commencez votre aventure de dresseur Pokémon.
+            </p>
+            <Link 
+              to="/pokemons" 
+              className="explore-button"
+              onClick={(e) => {
+                e.preventDefault();
+                const pokemonSection = document.getElementById('pokemon-section');
+                if (pokemonSection) {
+                  const headerHeight = document.querySelector('.header').offsetHeight;
+                  const pokemonSectionTop = pokemonSection.getBoundingClientRect().top + window.pageYOffset;
+                  const scrollToPosition = pokemonSectionTop - headerHeight;
+                  
+                  window.scrollTo({
+                    top: scrollToPosition,
+                    behavior: 'smooth'
+                  });
+                }
+              }}
+            >
+              Explorer les Pokémon
+            </Link>
+          </motion.div>
+        )}
+      </div>
+      
       <div className="auth-buttons">
         {user ? (
           <>
