@@ -27,6 +27,17 @@
   will-change: transform; /* Optimisation des performances */
 }
 
+.orbes-container {
+  display: flex;
+  align-items: center; /* Aligne verticalement l'image et le texte */
+}
+
+.orbes-image {
+  width: 60px; 
+  height: auto; 
+  margin-right: 1px; 
+
+}
 /* Image du logo */
 .PokeEmpire {
   width: 250px;

@@ -25,6 +25,10 @@
   margin-bottom: 1.5rem;
 }
 
+.red-text {
+  color: #ff4d4d;
+}
+
 .intro-section p {
   font-size: 1.2rem;
   color: #b0b0b0;
@@ -217,7 +221,17 @@
 .error {
   color: #ff4d4d;
 }
+.orbes-container {
+  display: flex;
+  align-items: center; /* Aligne verticalement l'image et le texte */
+  justify-content: center;
+}
 
+.orbes-image {
+  width: 60px; /* Ajustez la taille selon vos besoins */
+  height: auto; /* Conserve le ratio de l'image */
+  margin-right: 1px; /* Espace entre l'image et le texte */
+}
 /* Responsive */
 @media (max-width: 768px) {
   .home-container {

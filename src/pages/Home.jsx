@@ -3,6 +3,7 @@ import { getAllPokemons } from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from '../components/Search';
 import './Home.css';
+import Orbes from '../assets/orbes.png';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -14,9 +15,9 @@ function HomePage() {
 
   // Types de Pokémon disponibles
   const pokemonTypes = [
-    'Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 
-    'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 
-    'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'
+    'normal', 'fire', 'water', 'electric', 'grass', 'ice', 
+    'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 
+    'rock', 'ghost', 'dragon', 'steel', 'fairy'
   ];
 
   useEffect(() => {
@@ -37,7 +38,8 @@ function HomePage() {
 
   // Filtrer les Pokémon par type et recherche
   const filteredPokemons = pokemons.filter(pokemon => {
-    const matchesType = !selectedType || pokemon.type.includes(selectedType);
+    const matchesType = !selectedType || 
+      pokemon.types.map(type => type.toLowerCase()).includes(selectedType);
     const matchesSearch = !searchQuery || 
       pokemon.name.english.toLowerCase().includes(searchQuery.toLowerCase()) ||
       pokemon.name.french.toLowerCase().includes(searchQuery.toLowerCase());
@@ -56,6 +58,13 @@ function HomePage() {
           Explorez notre Pokédex complet et découvrez des informations détaillées sur chaque Pokémon.
           Que vous soyez un dresseur débutant ou un expert, vous trouverez ici tout ce dont vous avez besoin.
         </p>
+        <div className="orbes-container">
+          <img src={Orbes} alt="Orbes" className="orbes-image" />
+          <h3>
+            <strong className="red-text">Dès ton inscription, reçois 50 Orbes pour bâtir ton arsenal !</strong>
+          </h3>
+          <img src={Orbes} alt="Orbes" className="orbes-image" />
+        </div>
       </section>
 
       {/* Section de filtrage et recherche */}
@@ -98,23 +107,27 @@ function HomePage() {
         </div>
         
         <div className="pokemon-grid">
-          {filteredPokemons.map((pokemon) => (
-            <div key={pokemon._id} className="pokemon-card">
-              <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />
-              <div className="pokemon-info">
-                <Link to={`/pokemons/${pokemon._id}`} className="pokemon-link">
-                  <h2 className="pokemon-name">{pokemon.name.english}</h2>
-                </Link>
-                <div className="pokemon-types">
-                  {pokemon.type && pokemon.type.map((type, index) => (
-                    <span key={index} className={`pokemon-type ${type.toLowerCase()}`}>
-                      {type}
-                    </span>
-                  ))}
+          {filteredPokemons.length > 0 ? (
+            filteredPokemons.map((pokemon) => (
+              <div key={pokemon._id} className="pokemon-card">
+                <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />
+                <div className="pokemon-info">
+                  <Link to={`/pokemons/${pokemon._id}`} className="pokemon-link">
+                    <h2 className="pokemon-name">{pokemon.name.english}</h2>
+                  </Link>
+                  <div className="pokemon-types">
+                    {pokemon.types && pokemon.types.map((type, index) => (
+                      <span key={index} className={`pokemon-type ${type.toLowerCase()}`}>
+                        {type.charAt(0).toUpperCase() + type.slice(1)} {/* Mettre en majuscule la première lettre */}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className="error">Pokémon not found</div> // Message si aucun Pokémon n'est trouvé
+          )}
         </div>
       </section>
     </div>

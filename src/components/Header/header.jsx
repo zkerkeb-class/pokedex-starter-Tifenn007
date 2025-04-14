@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import PokeEmpire from "../../assets/PokeEmpire.png";
+import Orbes from "../../assets/orbes.png";
 import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
@@ -58,9 +59,14 @@ const Header = () => {
               Découvrez le monde fascinant des Pokémon. Explorez notre Pokédex complet, 
               apprenez-en davantage sur chaque créature et commencez votre aventure de dresseur Pokémon.
             </p>
-            <Link 
-              to="/pokemons" 
-              className="explore-button"
+            <div className="orbes-container">
+              <img src={Orbes} alt="gauche" className="orbes-image" />
+              <h1>Inscris-toi et empoche directement 50 Orbes</h1>
+              <img src={Orbes} alt="droite" className="orbes-image" />
+            </div>
+              <Link 
+                to="/pokemons" 
+                className="explore-button"
               onClick={(e) => {
                 e.preventDefault();
                 const pokemonSection = document.getElementById('pokemon-section');
