@@ -5,6 +5,7 @@ import CreatePokemonPage from '../pages/CreatePokemonPage';
 import EditPokemonPage from '../pages/EditPokemonPage';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import ProfilePage from '../pages/ProfilePage';
 import PrivateRoute from '../components/PrivateRoute';
 
 function AppRoutes() {
@@ -13,6 +14,14 @@ function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route
+        path="/profile/:username"
+        element={
+          <PrivateRoute>
+            <ProfilePage />
+          </PrivateRoute>
+        }
+      />
       <Route path="/pokemons/:id" element={<PokemonDetailPage />} />
       <Route
         path="/create"

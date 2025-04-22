@@ -8,26 +8,34 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const user = authService.getCurrentUser();
-    if (user) {
-      setUser(user);
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
     setLoading(false);
   }, []);
 
   const login = async (email, password) => {
     const response = await authService.login(email, password);
-    setUser(response);
+    if (response.user) {
+      setUser(response.user);
+      localStorage.setItem('user', JSON.stringify(response.user));
+    }
     return response;
   };
 
   const register = async (username, email, password) => {
     const response = await authService.register(username, email, password);
+    if (response.user) {
+      setUser(response.user);
+      localStorage.setItem('user', JSON.stringify(response.user));
+    }
     return response;
   };
 
   const logout = () => {
     authService.logout();
+    localStorage.removeItem('user');
     setUser(null);
   };
 
@@ -48,4 +56,4 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};  
+};

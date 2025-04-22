@@ -5,9 +5,10 @@ import "./Header.css";
 import PokeEmpire from "../../assets/PokeEmpire.png";
 import Orbes from "../../assets/orbes.png";
 import { useAuth } from "../../context/AuthContext";
+import OrbesCounter from "../OrbesCounter";
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState()
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -30,8 +31,9 @@ const Header = () => {
       className="header"
       animate={{
         height: isScrolled ? "120px" : "80vh",
-        backgroundColor: isScrolled ? "rgba(51, 51, 51, 0.8)" : "transparent",
+        backgroundColor: isScrolled  ? "rgba(51, 51, 51, 0.8)" : "transparent",
       }}
+
       transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
     >
       <div className="header-content">
@@ -61,7 +63,7 @@ const Header = () => {
             </p>
             <div className="orbes-container">
               <img src={Orbes} alt="gauche" className="orbes-image" />
-              <h1>Inscris-toi et empoche directement 50 Orbes</h1>
+              <h1>Inscris-toi et empoche directement 10 Orbes</h1>
               <img src={Orbes} alt="droite" className="orbes-image" />
             </div>
               <Link 
@@ -91,8 +93,17 @@ const Header = () => {
       <div className="auth-buttons">
         {user ? (
           <>
-            <span className="user-email">{user.email}</span>
-            <button className="auth-button logout-button" onClick={handleLogout}>
+            <Link
+              to={`/profile/${user.username || user.user?.username}`}
+              className="user-email"
+            >
+              {user.email}
+            </Link>
+            <OrbesCounter />
+            <button
+              className="auth-button logout-button"
+              onClick={handleLogout}
+            >
               Déconnexion
             </button>
           </>

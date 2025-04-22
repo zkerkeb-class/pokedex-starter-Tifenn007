@@ -9,7 +9,7 @@
   
 }
 
-/* Section d'introduction */
+
 .intro-section {
   text-align: center;
   margin-bottom: 3rem;
@@ -256,4 +256,5 @@
   .pokemon-grid {
     grid-template-columns: 1fr;
   }
+  
 }

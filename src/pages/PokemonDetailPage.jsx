@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPokemonById, deletePokemon } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const PokemonDetailPage = () => {
   const { id: paramId } = useParams();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [pokemon, setPokemon] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -53,7 +55,8 @@ const PokemonDetailPage = () => {
   }
 
   return (
-    <div>
+    <>
+      
       <h1>{pokemon.name?.english || 'Inconnu'}</h1>
       <p>Japonais : {pokemon.name?.japanese || 'Inconnu'}</p>
       <p>Chinois : {pokemon.name?.chinese || 'Inconnu'}</p>
@@ -66,10 +69,14 @@ const PokemonDetailPage = () => {
       <p>Attaque Spéciale : {pokemon.stats?.specialAttack || 'Inconnu'}</p>
       <p>Défense Spéciale : {pokemon.stats?.specialDefense || 'Inconnu'}</p>
       <p>Vitesse : {pokemon.stats?.speed || 'Inconnu'}</p>
-      <button onClick={handleDelete}>Supprimer le Pokémon</button>
-      <button onClick={() => navigate(`/edit/${paramId}`)}>Modifier le Pokémon</button>
+       {user && user.role === 'admin' && ( // Vérifiez si l'utilisateur est admin
+        <>
+          <button onClick={handleDelete}>Supprimer le Pokémon</button>
+          <button onClick={() => navigate(`/edit/${paramId}`)}>Modifier le Pokémon</button>
+        </>
+      )}
       <button type="button" onClick={() => navigate(`/`)}>Annuler</button>
-    </div>
+    </>
   );
 };
 

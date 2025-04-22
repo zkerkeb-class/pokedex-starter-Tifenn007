@@ -4,8 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import Search from '../components/Search';
 import './Home.css';
 import Orbes from '../assets/orbes.png';
+import { useAuth } from '../context/AuthContext';
+
 
 function HomePage() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +64,7 @@ function HomePage() {
         <div className="orbes-container">
           <img src={Orbes} alt="Orbes" className="orbes-image" />
           <h3>
-            <strong className="red-text">Dès ton inscription, reçois 50 Orbes pour bâtir ton arsenal !</strong>
+            <strong className="red-text">Dès ton inscription, reçois 10 Orbes pour bâtir ton arsenal !</strong>
           </h3>
           <img src={Orbes} alt="Orbes" className="orbes-image" />
         </div>
@@ -101,9 +104,11 @@ function HomePage() {
       <section id="pokemon-section" className="pokemon-section">
         <div className="section-header">
           <h3>{selectedType ? `Pokémon de type ${selectedType}` : 'Tous les Pokémon'}</h3>
-          <button className="create-button" onClick={() => navigate('/create')}>
-            Créer un nouveau Pokémon
-          </button>
+          {user && user.role === 'admin' && ( // Vérifiez si l'utilisateur est admin
+            <button className="create-button" onClick={() => navigate('/create')}>
+              Créer un nouveau Pokémon
+            </button>
+          )}
         </div>
         
         <div className="pokemon-grid">
@@ -118,11 +123,15 @@ function HomePage() {
                   <div className="pokemon-types">
                     {pokemon.types && pokemon.types.map((type, index) => (
                       <span key={index} className={`pokemon-type ${type.toLowerCase()}`}>
-                        {type.charAt(0).toUpperCase() + type.slice(1)} {/* Mettre en majuscule la première lettre */}
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
                       </span>
                     ))}
                   </div>
+                  
                 </div>
+                <button className="buy-button">
+                  Acheter pour {pokemon.price} <img src={Orbes} alt="Orbes" style={{ width: '20px', verticalAlign: 'middle' }} />
+                </button>
               </div>
             ))
           ) : (

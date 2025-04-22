@@ -1,0 +1,45 @@
+.profile-container {
+  padding: 2rem;
+}
+
+.tabs {
+  margin-bottom: 1rem;
+}
+
+.tabs button {
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background-color: #333;
+  color: #fff;
+}
+
+.tab-content {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.profile-orbes-counter {
+  display: inline-flex;
+  align-items: center;
+  background: #17085a;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin-bottom: 1rem;
+}
+
+.profile-orbes-counter .orbes-icon {
+  width: 24px;
+  margin-right: 8px;
+}
+
+.profile-orbes-counter span {
+  font-size: 1rem;
+  font-weight: 600;
+} 
