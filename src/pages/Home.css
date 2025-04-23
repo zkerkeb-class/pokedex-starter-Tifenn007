@@ -258,3 +258,39 @@
   }
   
 }
+
+/* Styles pour le bouton Acheter/Possédé */
+.buy-button {
+  background: none;
+  border: none;
+  color: #FFD700; /* texte jaune pour se démarquer */
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Couleur au survol si activé */
+.buy-button:hover:not(:disabled) {
+  color: #FFF; /* blanc éclatant au survol */
+}
+
+/* Style pour l'état désactivé (Possédé) */
+.buy-button:disabled {
+  color: #FF4D4D; /* rouge pour indiquer déjà possédé */
+  cursor: not-allowed;
+}
+
+/* Styles pour bouton Vendre */
+.sell-button {
+  background: none;
+  border: none;
+  color: #4dff5c; /* texte rouge visible */
+  font-weight: bold;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.sell-button:hover {
+  color: #FFF; /* blanc au survol */
+}

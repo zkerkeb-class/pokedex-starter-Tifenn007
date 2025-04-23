@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAllPokemons } from '../services/api';
+import { getAllPokemons, buyPokemon } from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from '../components/Search';
 import './Home.css';
@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 
 
 function HomePage() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const navigate = useNavigate();
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,6 +22,9 @@ function HomePage() {
     'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 
     'rock', 'ghost', 'dragon', 'steel', 'fairy'
   ];
+
+  // Liste des pokémons déjà possédés par l'utilisateur
+  const ownedIds = user?.pokemons?.map(p => p._id) || [];
 
   useEffect(() => {
     getAllPokemons()
@@ -48,6 +51,25 @@ function HomePage() {
       pokemon.name.french.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesType && matchesSearch;
   });
+
+  // Gestion de l'achat d'un Pokémon
+  const handleBuy = async (pokemon) => {
+    if (!user) {
+      // inviter l'utilisateur à se connecter
+      const goLogin = window.confirm(
+        "Vous devez être connecté pour acheter le pokémon."
+      );
+      if (goLogin) navigate('/login');
+      return;
+    }
+    try {
+      const data = await buyPokemon(pokemon.id, user.token);
+      updateUser({ ...user, orbes: data.orbes, pokemons: data.pokemons });
+      alert('Pokémon acheté avec succès !');
+    } catch (err) {
+      alert(err.message || 'Erreur lors de l\'achat du Pokémon');
+    }
+  };
 
   if (loading) return <div className="loading">Chargement des Pokémon...</div>;
   if (error) return <div className="error">Erreur : {error}</div>;
@@ -113,7 +135,9 @@ function HomePage() {
         
         <div className="pokemon-grid">
           {filteredPokemons.length > 0 ? (
-            filteredPokemons.map((pokemon) => (
+            filteredPokemons.map((pokemon) => {
+              const isOwned = ownedIds.includes(pokemon._id);
+              return (
               <div key={pokemon._id} className="pokemon-card">
                 <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />
                 <div className="pokemon-info">
@@ -129,11 +153,30 @@ function HomePage() {
                   </div>
                   
                 </div>
-                <button className="buy-button">
-                  Acheter pour {pokemon.price} <img src={Orbes} alt="Orbes" style={{ width: '20px', verticalAlign: 'middle' }} />
+                <button
+                  className="buy-button"
+                  onClick={() => handleBuy(pokemon)}
+                  disabled={isOwned || (user && user.orbes < pokemon.price)}
+                >
+                  {isOwned
+                    ? 'Possédé'
+                    : (
+                      <>
+                        Acheter pour {pokemon.price} <img src={Orbes} alt="Orbes" style={{ width: '20px', verticalAlign: 'middle' }} />
+                      </>
+                    )}
                 </button>
+                {isOwned && (
+                  <button
+                    className="sell-button"
+                    onClick={() => navigate(`/profile/${user.username || user.user?.username}`)}
+                  >
+                    Vendre
+                  </button>
+                )}
               </div>
-            ))
+              );
+            })
           ) : (
             <div className="error">Pokémon not found</div> // Message si aucun Pokémon n'est trouvé
           )}

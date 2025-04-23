@@ -71,3 +71,29 @@ export const getCurrentUserData = async (token) => {
     throw error;
   }
 };
+
+// Ajout de la fonction pour acheter un Pokémon
+export const buyPokemon = async (pokemonId, token) => {
+  try {
+    const response = await api.post(`/users/me/buy/${pokemonId}`, null, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de l'achat du Pokémon ${pokemonId}:`, error);
+    throw error.response?.data || { message: "Erreur lors de l'achat du Pokémon" };
+  }
+};
+
+// Ajout de la fonction pour vendre un Pokémon
+export const sellPokemon = async (pokemonId, token) => {
+  try {
+    const response = await api.post(`/users/me/sell/${pokemonId}`, null, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la vente du Pokémon ${pokemonId}:`, error);
+    throw error.response?.data || { message: "Erreur lors de la vente du Pokémon" };
+  }
+};
