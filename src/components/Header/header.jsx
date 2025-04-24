@@ -97,7 +97,7 @@ const Header = () => {
               to={`/profile/${user.username || user.user?.username}`}
               className="user-email"
             >
-              {user.email}
+              {"Mon profil (" + user.username + ")"}
             </Link>
             <OrbesCounter />
             <button
