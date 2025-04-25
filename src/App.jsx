@@ -7,10 +7,10 @@ import { AuthProvider } from './context/AuthContext';
 const AppContent = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-
+  
   return (
     <div className="app">
-      {isHomePage && <Header />}
+      <Header isHomePage={isHomePage} />
       <AppRoutes />
     </div>
   );

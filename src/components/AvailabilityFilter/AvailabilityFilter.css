@@ -1,0 +1,35 @@
+/* Styles pour le composant AvailabilityFilter */
+.availability-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.availability-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.availability-filter .availability-button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  border: none;
+  background-color: #2d2d2d;
+  color: #f5f5f5;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.availability-filter .availability-button.active {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.availability-filter .availability-button:hover {
+  background-color: #3d3d3d;
+  transform: translateY(-1px);
+} 

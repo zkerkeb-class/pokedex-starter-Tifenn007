@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { getAllPokemons, buyPokemon } from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from '../components/Search';
+import PriceFilter from '../components/PriceFilter/PriceFilter';
+import AvailabilityFilter from '../components/AvailabilityFilter/AvailabilityFilter';
 import './Home.css';
 import Orbes from '../assets/orbes.png';
 import { useAuth } from '../context/AuthContext';
@@ -15,6 +17,9 @@ function HomePage() {
   const [error, setError] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [availabilityFilter, setAvailabilityFilter] = useState('all'); // 'all','available','unavailable','owned'
 
   // Types de Pokémon disponibles
   const pokemonTypes = [
@@ -25,6 +30,11 @@ function HomePage() {
 
   // Liste des pokémons déjà possédés par l'utilisateur
   const ownedIds = user?.pokemons?.map(p => p._id) || [];
+
+  // Calcul de la plage globale de prix à partir de tous les Pokémon
+  const prices = pokemons.map(p => p.price);
+  const globalMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
+  const globalMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
   useEffect(() => {
     getAllPokemons()
@@ -42,14 +52,25 @@ function HomePage() {
       });
   }, []);
 
-  // Filtrer les Pokémon par type et recherche
+  // Filtrer les Pokémon par type, recherche, prix et disponibilité
   const filteredPokemons = pokemons.filter(pokemon => {
-    const matchesType = !selectedType || 
+    const matchesType = !selectedType ||
       pokemon.types.map(type => type.toLowerCase()).includes(selectedType);
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       pokemon.name.english.toLowerCase().includes(searchQuery.toLowerCase()) ||
       pokemon.name.french.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesType && matchesSearch;
+    const matchesPrice =
+      (minPrice === '' || pokemon.price >= Number(minPrice)) &&
+      (maxPrice === '' || pokemon.price <= Number(maxPrice));
+    let matchesAvailability = true;
+    if (availabilityFilter === 'available') {
+      matchesAvailability = user && user.orbes >= pokemon.price && !ownedIds.includes(pokemon._id);
+    } else if (availabilityFilter === 'unavailable') {
+      matchesAvailability = user && user.orbes < pokemon.price && !ownedIds.includes(pokemon._id);
+    } else if (availabilityFilter === 'owned') {
+      matchesAvailability = ownedIds.includes(pokemon._id);
+    }
+    return matchesType && matchesSearch && matchesPrice && matchesAvailability;
   });
 
   // Gestion de l'achat d'un Pokémon
@@ -119,6 +140,18 @@ function HomePage() {
             <h3>Rechercher un Pokémon</h3>
             <Search onSearch={setSearchQuery} />
           </div>
+          <PriceFilter
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            onMinChange={setMinPrice}
+            onMaxChange={setMaxPrice}
+            globalMin={globalMinPrice}
+            globalMax={globalMaxPrice}
+          />
+          <AvailabilityFilter
+            value={availabilityFilter}
+            onChange={setAvailabilityFilter}
+          />
         </div>
       </section>
 

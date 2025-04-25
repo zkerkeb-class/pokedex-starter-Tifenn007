@@ -62,13 +62,13 @@ function ProfilePage() {
   };
 
   const handleDaily = async () => {
+    const token = authService.getToken();
     try {
-      const token = authService.getToken();
       const data = await claimDailyReward(token);
       updateUser({ ...user, orbes: data.orbes, lastDailyReward: data.lastDailyReward });
-      alert(data.message);
+      setQuestsStat(prev => ({ ...prev, dailyRewardClaimed: data.dailyRewardClaimed }));
     } catch (err) {
-      alert(err.message || 'Impossible de réclamer la récompense journalière');
+      console.error('Erreur lors de la réclamation journalière :', err);
     }
   };
 
@@ -222,6 +222,7 @@ function ProfilePage() {
             <h3>Informations du profil</h3>
             <p>Email: {user.email}</p>
             <p>Nom d&apos;utilisateur: {user.username || user.user?.username}</p>
+            <p>Dernière connexion : {user.derConnect ? new Date(user.derConnect).toLocaleString() : 'Jamais'}</p>
           </div>
         )}
         {activeTab === 'rewards' && (

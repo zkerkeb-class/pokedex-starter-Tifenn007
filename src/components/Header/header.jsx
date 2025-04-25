@@ -7,17 +7,17 @@ import Orbes from "../../assets/orbes.png";
 import { useAuth } from "../../context/AuthContext";
 import OrbesCounter from "../OrbesCounter";
 
-const Header = () => {
-  const [isScrolled, setIsScrolled] = useState()
+const Header = ({ isHomePage }) => {
+  // État pour suivre le scroll et animer le logo
+  const [isScrolled, setIsScrolled] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
+    // état initial
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -30,12 +30,20 @@ const Header = () => {
     <motion.header
       className="header"
       animate={{
-        height: isScrolled ? "120px" : "80vh",
-        backgroundColor: isScrolled  ? "rgba(51, 51, 51, 0.8)" : "transparent",
+        // header animé seulement sur la home, sinon header réduit fixe
+        height: isHomePage ? (isScrolled ? "120px" : "80vh") : "120px",
+        backgroundColor: isHomePage
+          ? (isScrolled ? "rgba(51, 51, 51, 0.8)" : "transparent")
+          : "rgba(51, 51, 51, 0.8)",
       }}
-
       transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
     >
+      {/* Lien Home : affiche une icône maison pour revenir à l'accueil */}
+      <Link to="/" className="home-link" aria-label="Accueil">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+        </svg>
+      </Link>
       <div className="header-content">
         <motion.img
           src={PokeEmpire}
@@ -49,7 +57,7 @@ const Header = () => {
           transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
         />
         
-        {!isScrolled && (
+        {isHomePage && !isScrolled && (
           <motion.div 
             className="header-text"
             initial={{ opacity: 0, y: 20 }}
