@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPokemon, getAllPokemons } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const CreatePokemonPage = () => {
   const [formData, setFormData] = useState({
@@ -20,26 +21,38 @@ const CreatePokemonPage = () => {
       specialDefense: 0,
       speed: 0,
     },
-    image: '',
+    price: 0,
+    evolutions: [],
   });
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [imageFile, setImageFile] = useState(null);
+
+  // Liste des types disponibles
+  const allTypes = [
+    'normal','fire','water','electric','grass','ice',
+    'fighting','poison','ground','flying','psychic','bug',
+    'rock','ghost','dragon','steel','fairy'
+  ];
 
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
-        const response = await getAllPokemons();
-        const pokemons = response.pokemons;
-        const maxId = Math.max(...pokemons.map(p => p.id));
+        // getAllPokemons renvoie directement un tableau
+        const pokemons = await getAllPokemons();
+        const maxId = pokemons.length > 0 ? Math.max(...pokemons.map(p => p.id)) : 0;
         setFormData(prev => ({
           ...prev,
           id: maxId + 1,
         }));
       } catch (error) {
         console.error('Erreur fetch pokémons :', error);
-        setError("Impossible de récupérer les pokémons");
+        // Définir un id par défaut si l'API n'est pas accessible
+        setFormData(prev => ({ ...prev, id: 1 }));
+        // On ne définit pas d'erreur pour éviter l'affichage
       }
     };
 
@@ -52,8 +65,22 @@ const CreatePokemonPage = () => {
     setError(null);
 
     try {
-      await createPokemon(formData);
-      navigate(`/pokemons/${formData.id}`);
+      const token = user?.token;
+      // Préparer FormData si une image est sélectionnée
+      const payload = imageFile
+        ? new FormData()
+        : formData;
+      if (imageFile) {
+        payload.append('image', imageFile);
+        payload.append('id', formData.id);
+        payload.append('name', JSON.stringify(formData.name));
+        formData.types.forEach(type => payload.append('types', type));
+        payload.append('stats', JSON.stringify(formData.stats));
+        payload.append('price', formData.price);
+        formData.evolutions.forEach(evo => payload.append('evolutions', evo));
+      }
+      const newPokemon = await createPokemon(payload, token);
+      navigate(`/pokemons/${newPokemon._id}`);
     } catch (error) {
       console.error('Erreur création Pokémon :', error);
       setError('Échec lors de la création du Pokémon');
@@ -85,11 +112,27 @@ const CreatePokemonPage = () => {
     }
   };
 
+  // Handler pour les cases à cocher des types
+  const handleTypeCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData(prev => {
+      const types = checked
+        ? [...prev.types, value]
+        : prev.types.filter(t => t !== value);
+      return { ...prev, types };
+    });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) setImageFile(file);
+  };
+
   return (
     <div>
       <h1>Créer un Pokémon</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <h2>ID</h2>
         <input type="number" value={formData.id} readOnly />
 
@@ -106,71 +149,108 @@ const CreatePokemonPage = () => {
         ))}
 
         <h2>Types</h2>
-        <input
-          type="text"
-          name="types"
-          placeholder="ex: Grass, Poison"
-          value={formData.types.join(',')}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              types: e.target.value.split(',').map(t => t.trim()),
-            })
-          }
-        />
+        <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '1rem' }}>
+          {allTypes.map(type => (
+            <label key={type} style={{ marginRight: '1rem', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                name="types"
+                value={type}
+                checked={formData.types.includes(type)}
+                onChange={handleTypeCheckboxChange}
+              />
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </label>
+          ))}
+        </div>
 
         <h2>Stats</h2>
+        <label htmlFor="stats-hp">HP</label>
         <input
+          id="stats-hp"
           type="number"
           name="stats.hp"
           placeholder="HP"
+          min="0"
           value={formData.stats.hp}
           onChange={handleInputChange}
         />
+        <label htmlFor="stats-attack">Attack</label>
         <input
+          id="stats-attack"
           type="number"
           name="stats.attack"
           placeholder="Attack"
+          min="0"
           value={formData.stats.attack}
           onChange={handleInputChange}
         />
+        <label htmlFor="stats-defense">Defense</label>
         <input
+          id="stats-defense"
           type="number"
           name="stats.defense"
           placeholder="Defense"
+          min="0"
           value={formData.stats.defense}
           onChange={handleInputChange}
         />
+        <label htmlFor="stats-specialAttack">Special Attack</label>
         <input
+          id="stats-specialAttack"
           type="number"
           name="stats.specialAttack"
           placeholder="Special Attack"
+          min="0"
           value={formData.stats.specialAttack}
           onChange={handleInputChange}
         />
+        <label htmlFor="stats-specialDefense">Special Defense</label>
         <input
+          id="stats-specialDefense"
           type="number"
           name="stats.specialDefense"
           placeholder="Special Defense"
+          min="0"
           value={formData.stats.specialDefense}
           onChange={handleInputChange}
         />
+        <label htmlFor="stats-speed">Speed</label>
         <input
+          id="stats-speed"
           type="number"
           name="stats.speed"
           placeholder="Speed"
+          min="0"
           value={formData.stats.speed}
           onChange={handleInputChange}
         />
 
+        <h2>Prix</h2>
+        <label htmlFor="price">Prix</label>
+        <input
+          id="price"
+          type="number"
+          name="price"
+          placeholder="Prix"
+          min="0"
+          value={formData.price}
+          onChange={(e) => setFormData(prev => ({ ...prev, price: Number(e.target.value) }))}
+        />
+
         <h2>Image</h2>
         <input
-          type="text"
-          name="image"
-          placeholder="Image URL"
-          value={formData.image}
-          onChange={handleInputChange}
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
         />
+        {imageFile && (
+          <img
+            src={URL.createObjectURL(imageFile)}
+            alt="Preview"
+            style={{ maxWidth: '200px', marginTop: '0.5rem' }}
+          />
+        )}
 
         <button type="submit" disabled={loading}>
           {loading ? 'Création en cours...' : 'Créer'}

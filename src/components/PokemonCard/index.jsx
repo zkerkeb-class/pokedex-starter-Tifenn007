@@ -1,49 +1,50 @@
-import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Orbes from '../../assets/orbes.png';
 import './index.css';
 
-const PokemonCard = ({ name, types, image, attack, defense, hp }) => {
-  const [currentHP, setCurrentHP] = useState(hp);
-
-  useEffect(() => {
-    console.log("currentHP useEffect", currentHP);
-    if (currentHP <= 0) {
-      alert("Pokemon is dead");
-    }
-  }, [currentHP]);
-
+function PokemonCard({
+  pokemon,
+  isOwned,
+  isAdmin,
+  user,
+  handleBuy,
+}) {
+  const navigate = useNavigate();
 
   return (
     <div className="pokemon-card">
-      <h1 className="pokemon-name">{name}</h1>
-      <img className="pokemon-image" src={image} alt={name} />
-      {types && types.map((type) => (
-        <p key={type} className="pokemon-type">{type}</p>
-      ))}
-      <div className="stat">
-        <p>Attack: {attack}</p>
-        <div className="stat-bar">
-          <div className="stat-bar-fill" style={{ width: `${attack}%` }}></div>
+      <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />
+      <div className="pokemon-info">
+        <Link to={`/pokemons/${pokemon._id}`} className="pokemon-link">
+          <h2 className="pokemon-name">{pokemon.name.english}</h2>
+        </Link>
+        <div className="pokemon-types">
+          {pokemon.types && pokemon.types.map((type, index) => (
+            <span key={index} className={`pokemon-type ${type.toLowerCase()}`}>
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </span>
+          ))}
         </div>
       </div>
-      <div className="stat">
-        <p>Defense: {defense}</p>
-        <div className="stat-bar">
-          <div className="stat-bar-fill" style={{ width: `${defense}%` }}></div>
-        </div>
-      </div>
-      <div className="stat">
-        <p>HP: {currentHP}</p>
-        <div className="stat-bar">
-          <div className="stat-bar-fill" style={{ width: `${currentHP}%` }}></div>
-        </div>
-      </div>
-      <button className="pokemon-attack-button" onClick={() => {
-        setCurrentHP(currentHP - 10);
-      }}>
-        Attaque
-      </button>
+      {!isAdmin && !isOwned && (
+        <button
+          className="buy-button"
+          onClick={() => handleBuy(pokemon)}
+          disabled={user && user.orbes < pokemon.price}
+        >
+          Acheter pour {pokemon.price} <img src={Orbes} alt="Orbes" style={{ width: '20px', verticalAlign: 'middle' }} />
+        </button>
+      )}
+      {!isAdmin && isOwned && (
+        <button
+          className="sell-button"
+          onClick={() => navigate(`/profile/${user.username || user.user?.username}`)}
+        >
+          Vendre
+        </button>
+      )}
     </div>
   );
-};
+}
 
 export default PokemonCard;

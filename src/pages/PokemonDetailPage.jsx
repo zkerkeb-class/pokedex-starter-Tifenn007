@@ -34,8 +34,9 @@ const PokemonDetailPage = () => {
   }, [paramId]);
 
   const handleDelete = async () => {
+    if (!window.confirm('Voulez-vous supprimer ce Pokémon ?')) return;
     try {
-      await deletePokemon(paramId); // Utilisation de paramId
+      await deletePokemon(paramId, user?.token);
       navigate('/');
     } catch (error) {
       console.error(`Erreur lors de la suppression du Pokémon avec l'id ${paramId} :`, error);

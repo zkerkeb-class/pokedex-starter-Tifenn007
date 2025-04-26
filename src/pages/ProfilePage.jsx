@@ -10,6 +10,7 @@ import Orbes from '../assets/orbes.png';
 function ProfilePage() {
   const { username } = useParams();
   const { user, updateUser, loading } = useAuth();
+  const isAdmin = user?.role === 'admin';
   const [arsenal, setArsenal] = useState([]);
   const [loadingArsenal, setLoadingArsenal] = useState(false);
   const [errorArsenal, setErrorArsenal] = useState(null);
@@ -17,10 +18,10 @@ function ProfilePage() {
   const [questsStat, setQuestsStat] = useState({ dailyRewardClaimed: false, orbesReward: 10, quests: [] });
   const [loadingRewards, setLoadingRewards] = useState(false);
   const [errorRewards, setErrorRewards] = useState(null);
-  const [activeTab, setActiveTab] = useState('arsenal');
+  const [activeTab, setActiveTab] = useState(isAdmin ? 'rewards' : 'arsenal');
 
   useEffect(() => {
-    if (activeTab === 'arsenal') {
+    if (!isAdmin && activeTab === 'arsenal') {
       setLoadingArsenal(true);
       getCurrentUserData(authService.getToken())
         .then(data => setArsenal(data.pokemons))
@@ -154,14 +155,16 @@ function ProfilePage() {
   return (
     <div className="profile-container">
       <h2>Profil de {username}</h2>
-      <OrbesCounter />
+      {!isAdmin && <OrbesCounter />}
       <div className="tabs">
-        <button
-          className={activeTab === 'arsenal' ? 'active' : ''}
-          onClick={() => setActiveTab('arsenal')}
-        >
-          Mon Arsenal
-        </button>
+        {!isAdmin && (
+          <button
+            className={activeTab === 'arsenal' ? 'active' : ''}
+            onClick={() => setActiveTab('arsenal')}
+          >
+            Mon Arsenal
+          </button>
+        )}
         <button
           className={activeTab === 'profil' ? 'active' : ''}
           onClick={() => setActiveTab('profil')}
@@ -176,7 +179,7 @@ function ProfilePage() {
         </button>
       </div>
       <div className="tab-content">
-        {activeTab === 'arsenal' && (
+        {activeTab === 'arsenal' && !isAdmin && (
           <div>
             <h3>Mon Arsenal de Pokémons</h3>
             {loadingArsenal ? (

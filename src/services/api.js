@@ -9,7 +9,14 @@ export const getAllPokemons = async () => {
   try {
     const response = await api.get('/pokemons');
     console.log("API Response:", response.data);
-    return response.data;
+    // Prefixer l'URL de l'image pour qu'elle pointe vers le backend
+    const pokemons = response.data.map(p => ({
+      ...p,
+      image: p.image && !/^https?:/.test(p.image)
+        ? `http://localhost:3000${p.image}`
+        : p.image
+    }));
+    return pokemons;
   } catch (error) {
     console.error('Error fetching all pokemons:', error);
     throw error;
@@ -21,7 +28,12 @@ export const getPokemonById = async (_id) => {
     console.log("Appel API avec l'ID :", _id);
     const response = await api.get(`/pokemons/${_id}`);
     console.log("Réponse de l'API :", response.data);
-    return response.data;
+    // Prefixer l'URL de l'image
+    const pokemon = response.data;
+    if (pokemon.image && !/^https?:/.test(pokemon.image)) {
+      pokemon.image = `http://localhost:3000${pokemon.image}`;
+    }
+    return pokemon;
   } catch (error) {
     console.error(`Erreur lors de la récupération du Pokémon avec l'id ${_id} :`, error);
     throw error;
@@ -29,9 +41,23 @@ export const getPokemonById = async (_id) => {
 };
 
 
-export const createPokemon = async (data) => {
+export const createPokemon = async (data, token) => {
   try {
-    const response = await api.post('/pokemons', data);
+    // Si on envoie un FormData (upload d'image)
+    if (data instanceof FormData) {
+      // Laisser axios définir lui-même le Content-Type (avec boundary)
+      const config = { headers: {} };
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      const response = await api.post('/pokemons', data, config);
+      return response.data;
+    }
+    // Sinon envoi JSON classique
+    const config = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+    const response = await api.post('/pokemons', data, config);
     return response.data;
   } catch (error) {
     console.error('Error creating pokemon:', error);
@@ -39,9 +65,19 @@ export const createPokemon = async (data) => {
   }
 };
 
-export const updatePokemon = async (id, data) => {
+export const updatePokemon = async (id, data, token) => {
   try {
-    const response = await api.put(`/pokemons/${id}`, data);
+    let config = {};
+    if (token) {
+      config.headers = { Authorization: `Bearer ${token}` };
+    }
+    if (data instanceof FormData) {
+      // Laisser axios gérer le Content-Type (boundary)
+      const response = await api.put(`/pokemons/${id}`, data, config);
+      return response.data;
+    }
+    // Sinon envoi JSON classique
+    const response = await api.put(`/pokemons/${id}`, data, config);
     return response.data;
   } catch (error) {
     console.error(`Error updating pokemon with id ${id}:`, error);
@@ -49,9 +85,12 @@ export const updatePokemon = async (id, data) => {
   }
 };
 
-export const deletePokemon = async (id) => {
+export const deletePokemon = async (id, token) => {
   try {
-    const response = await api.delete(`/pokemons/${id}`);
+    const config = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+    const response = await api.delete(`/pokemons/${id}`, config);
     return response.data;
   } catch (error) {
     console.error(`Error deleting pokemon with id ${id}:`, error);
@@ -59,13 +98,24 @@ export const deletePokemon = async (id) => {
   }
 };
 
+
 // Nouvel export pour récupérer les données de l'utilisateur connecté
 export const getCurrentUserData = async (token) => {
   try {
     const response = await api.get('/users/me', {
       headers: { Authorization: `Bearer ${token}` }
     });
-    return response.data;
+    // Prefixer l'URL des images dans l'arsenal
+    const data = response.data;
+    if (Array.isArray(data.pokemons)) {
+      data.pokemons = data.pokemons.map(p => ({
+        ...p,
+        image: p.image && !/^https?:/.test(p.image)
+          ? `http://localhost:3000${p.image}`
+          : p.image
+      }));
+    }
+    return data;
   } catch (error) {
     console.error('Error fetching current user data:', error);
     throw error;

@@ -7,10 +7,12 @@ import AvailabilityFilter from '../components/AvailabilityFilter/AvailabilityFil
 import './Home.css';
 import Orbes from '../assets/orbes.png';
 import { useAuth } from '../context/AuthContext';
+import PokemonCard from '../components/PokemonCard';
 
 
 function HomePage() {
   const { user, updateUser } = useAuth();
+  const isAdmin = user?.role === 'admin';
   const navigate = useNavigate();
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,6 +77,11 @@ function HomePage() {
 
   // Gestion de l'achat d'un Pokémon
   const handleBuy = async (pokemon) => {
+    // Restriction pour les administrateurs
+    if (user && user.role === 'admin') {
+      alert("Vous êtes administrateur et ne pouvez pas acheter de Pokémon.");
+      return;
+    }
     if (!user) {
       // inviter l'utilisateur à se connecter
       const goLogin = window.confirm(
@@ -84,7 +91,7 @@ function HomePage() {
       return;
     }
     try {
-      const data = await buyPokemon(pokemon.id, user.token);
+      const data = await buyPokemon(pokemon._id, user.token);
       updateUser({ ...user, orbes: data.orbes, pokemons: data.pokemons });
       alert('Pokémon acheté avec succès !');
     } catch (err) {
@@ -104,13 +111,15 @@ function HomePage() {
           Explorez notre Pokédex complet et découvrez des informations détaillées sur chaque Pokémon.
           Que vous soyez un dresseur débutant ou un expert, vous trouverez ici tout ce dont vous avez besoin.
         </p>
-        <div className="orbes-container">
-          <img src={Orbes} alt="Orbes" className="orbes-image" />
-          <h3>
-            <strong className="red-text">Dès ton inscription, reçois 10 Orbes pour bâtir ton arsenal !</strong>
-          </h3>
-          <img src={Orbes} alt="Orbes" className="orbes-image" />
-        </div>
+        {!isAdmin && (
+          <div className="orbes-container">
+            <img src={Orbes} alt="Orbes" className="orbes-image" />
+            <h3>
+              <strong className="red-text">Dès ton inscription, reçois 10 Orbes pour bâtir ton arsenal !</strong>
+            </h3>
+            <img src={Orbes} alt="Orbes" className="orbes-image" />
+          </div>
+        )}
       </section>
 
       {/* Section de filtrage et recherche */}
@@ -171,47 +180,18 @@ function HomePage() {
             filteredPokemons.map((pokemon) => {
               const isOwned = ownedIds.includes(pokemon._id);
               return (
-              <div key={pokemon._id} className="pokemon-card">
-                <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />
-                <div className="pokemon-info">
-                  <Link to={`/pokemons/${pokemon._id}`} className="pokemon-link">
-                    <h2 className="pokemon-name">{pokemon.name.english}</h2>
-                  </Link>
-                  <div className="pokemon-types">
-                    {pokemon.types && pokemon.types.map((type, index) => (
-                      <span key={index} className={`pokemon-type ${type.toLowerCase()}`}>
-                        {type.charAt(0).toUpperCase() + type.slice(1)}
-                      </span>
-                    ))}
-                  </div>
-                  
-                </div>
-                <button
-                  className="buy-button"
-                  onClick={() => handleBuy(pokemon)}
-                  disabled={isOwned || (user && user.orbes < pokemon.price)}
-                >
-                  {isOwned
-                    ? 'Possédé'
-                    : (
-                      <>
-                        Acheter pour {pokemon.price} <img src={Orbes} alt="Orbes" style={{ width: '20px', verticalAlign: 'middle' }} />
-                      </>
-                    )}
-                </button>
-                {isOwned && (
-                  <button
-                    className="sell-button"
-                    onClick={() => navigate(`/profile/${user.username || user.user?.username}`)}
-                  >
-                    Vendre
-                  </button>
-                )}
-              </div>
+                <PokemonCard
+                  key={pokemon._id}
+                  pokemon={pokemon}
+                  isOwned={isOwned}
+                  isAdmin={isAdmin}
+                  user={user}
+                  handleBuy={handleBuy}
+                />
               );
             })
           ) : (
-            <div className="error">Pokémon not found</div> // Message si aucun Pokémon n'est trouvé
+            <div className="error">Aucun Pokémon trouvé</div>
           )}
         </div>
       </section>

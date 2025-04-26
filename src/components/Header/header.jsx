@@ -12,6 +12,7 @@ const Header = ({ isHomePage }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
@@ -107,7 +108,7 @@ const Header = ({ isHomePage }) => {
             >
               {"Mon profil (" + user.username + ")"}
             </Link>
-            <OrbesCounter />
+            {!isAdmin && <OrbesCounter />}
             <button
               className="auth-button logout-button"
               onClick={handleLogout}
