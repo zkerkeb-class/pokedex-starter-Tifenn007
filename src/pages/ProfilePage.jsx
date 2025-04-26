@@ -155,7 +155,11 @@ function ProfilePage() {
   return (
     <div className="profile-container">
       <h2>Profil de {username}</h2>
-      {!isAdmin && <OrbesCounter />}
+      {!isAdmin && (
+        <div className="profile-orbes-counter">
+          <OrbesCounter />
+        </div>
+      )}
       <div className="tabs">
         {!isAdmin && (
           <button
@@ -187,11 +191,11 @@ function ProfilePage() {
             ) : errorArsenal ? (
               <p className="error">{errorArsenal}</p>
             ) : arsenal.length > 0 ? (
-              <div className="pokemon-grid">
+              <div className="profile-pokemon-grid">
                 {arsenal.map((pokemon) => {
                   const salePrice = Math.round(pokemon.price * 0.8);
                   return (
-                    <div key={pokemon._id} className="pokemon-card">
+                    <div key={pokemon._id} className="profile-pokemon-card">
                       <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />
                       <div className="pokemon-info">
                         <Link to={`/pokemons/${pokemon._id}`} className="pokemon-link">
@@ -291,26 +295,40 @@ function ProfilePage() {
                     {questsStat.quests.length === 0 ? (
                       <p>Aucune quête en cours</p>
                     ) : (
-                      questsStat.quests.map((q, idx) => (
-                        <div key={q._id || idx} className="quest-item">
-                          <span>{q.name} : {q.current}/{q.target}</span>
-                          <span className={`status ${q.completed ? 'done' : 'in-progress'}`}>
-                            {q.completed ? 'Terminé' : 'En cours'}
-                          </span>
-                          <button
-                            className="claim-btn"
-                            disabled={!q.completed || q.claimed}
-                            onClick={() => handleClaimQuest(q._id)}
-                          >
-                            {!q.claimed ? (
-                              <>
-                                Récupérer {q.reward}{' '}
-                                <img src={Orbes} alt="Orbes" style={{ width: 16, verticalAlign: 'middle' }} />
-                              </>
-                            ) : 'Récompensé'}
-                          </button>
-                        </div>
-                      ))
+                      questsStat.quests.map((q, idx) => {
+                        const percent = Math.min(100, Math.round((q.current / q.target) * 100));
+                        return (
+                          <div key={q._id || idx} className="quest-item">
+                            <div className="quest-header">
+                              <span className="quest-name">{q.name}</span>
+                              <span className={`status ${q.completed ? 'done' : 'in-progress'}`}>
+                                {q.completed ? 'Terminé' : 'En cours'}
+                              </span>
+                            </div>
+                            <div className="quest-progress-bar">
+                              <div
+                                className="quest-progress-bar-fill"
+                                style={{ width: `${percent}%` }}
+                              />
+                              <span className="quest-progress-label">
+                                {q.current} / {q.target}
+                              </span>
+                            </div>
+                            <button
+                              className="claim-btn"
+                              disabled={!q.completed || q.claimed}
+                              onClick={() => handleClaimQuest(q._id)}
+                            >
+                              {!q.claimed ? (
+                                <>
+                                  Récupérer {q.reward}{' '}
+                                  <img src={Orbes} alt="Orbes" style={{ width: 16, verticalAlign: 'middle' }} />
+                                </>
+                              ) : 'Récompensé'}
+                            </button>
+                          </div>
+                        );
+                      })
                     )}
                   </section>
                 )}

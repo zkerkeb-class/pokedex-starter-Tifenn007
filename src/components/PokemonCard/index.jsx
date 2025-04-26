@@ -13,7 +13,7 @@ function PokemonCard({
 
   return (
     <div className="pokemon-card">
-      <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />
+      <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-detail-image" />
       <div className="pokemon-info">
         <Link to={`/pokemons/${pokemon._id}`} className="pokemon-link">
           <h2 className="pokemon-name">{pokemon.name.english}</h2>

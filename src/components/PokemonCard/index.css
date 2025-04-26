@@ -24,10 +24,10 @@
 }
 
 .pokemon-image {
-  width: 170px;
-  height: 170px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
-  margin-top: -60px;
+  margin-top: 0;
   margin-bottom: 0.5rem;
   z-index: 2;
 }
@@ -137,13 +137,24 @@
 
 @media (max-width: 600px) {
   .pokemon-card {
-    min-width: 90vw;
-    max-width: 95vw;
+    width: 100vw;
+    box-sizing: border-box;
     padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    min-width: unset;
+    max-width: unset;
   }
   .pokemon-image {
-    width: 120px;
-    height: 120px;
-    margin-top: -40px;
+    width: 100px;
+    height: 100px;
+    margin-top: 0;
   }
+}
+
+.pokemon-detail-image {
+  width: 170px;
+  height: 170px;
+  object-fit: contain;
+  background: #222;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }

@@ -1,1 +1,184 @@
+.pokemon-detail-card {
+  background: linear-gradient(135deg, #232526 0%, #414345 100%);
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  color: #fff;
+  max-width: 540px;
+  min-width: 400px;
+  margin: 3rem auto;
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  position: relative;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.7rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close-btn:hover {
+  background: #ff1a1a;
+}
+
+.pokemon-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  justify-content: center;
+}
+.pokemon-detail-image {
+  width: 170px;
+  height: 170px;
+  object-fit: contain;
+  background: #222;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.pokemon-detail-names {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+}
+.pokemon-detail-names h1 {
+  font-size: 2.3rem;
+  margin: 0 0 0.7rem 0;
+  color: #ffb347;
+}
+.pokemon-detail-names p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #e0e0e0;
+}
+
+.pokemon-detail-info {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+.pokemon-detail-row {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+}
+.pokemon-detail-label {
+  min-width: 110px;
+  font-weight: bold;
+  color: #ffb347;
+  font-size: 1.1rem;
+}
+.pokemon-detail-types {
+  display: flex;
+  gap: 0.7rem;
+}
+.pokemon-type {
+  padding: 0.4rem 1.1rem;
+  border-radius: 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+/* Couleurs des types (repris de Home.css) */
+.normal { background-color: #A8A878; }
+.fire { background-color: #F08030; }
+.water { background-color: #6890F0; }
+electric { background-color: #F8D030; }
+grass { background-color: #78C850; }
+ice { background-color: #98D8D8; }
+fighting { background-color: #C03028; }
+.poison { background-color: #A040A0; }
+ground { background-color: #E0C068; }
+flying { background-color: #A890F0; }
+psychic { background-color: #F85888; }
+bug { background-color: #A8B820; }
+rock { background-color: #B8A038; }
+ghost { background-color: #705898; }
+dragon { background-color: #7038F8; }
+dark { background-color: #705848; }
+.steel { background-color: #B8B8D0; }
+fairy { background-color: #EE99AC; }
+
+.pokemon-detail-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+}
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.08rem;
+  width: 100%;
+}
+.stat-row > span:first-child {
+  min-width: 90px;
+  text-align: left;
+}
+.stat-bar {
+  background: #222;
+  border-radius: 1rem;
+  width: 180px;
+  height: 16px;
+  overflow: hidden;
+  margin: 0 0.7rem;
+  flex-shrink: 0;
+}
+.stat-row > span:last-child {
+  min-width: 40px;
+  text-align: right;
+  display: inline-block;
+}
+.stat-fill {
+  height: 100%;
+  border-radius: 1rem;
+  transition: width 0.4s;
+}
+.stat-fill.hp { background: #ff5959; }
+.stat-fill.attack { background: #f5ac78; }
+.stat-fill.defense { background: #fae078; }
+.stat-fill.sp-attack { background: #9db7f5; }
+.stat-fill.sp-defense { background: #a7db8d; }
+.stat-fill.speed { background: #fa92b2; }
+
+.pokemon-detail-actions {
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 100%;
+}
+.admin-btn {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  font-size: 1.08rem;
+  transition: background 0.2s;
+}
+.admin-btn:hover {
+  background: #ff1a1a;
+}
