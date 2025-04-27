@@ -1,3 +1,9 @@
+/*
+  Variables CSS globales et styles de base
+  - font-family : police principale de l'application
+  - color-scheme : supporte le mode clair/sombre
+  - font-synthesis, text-rendering, font-smoothing : pour une meilleure lisibilité
+*/
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -5,7 +11,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,6 +18,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/*
+  Styles pour les liens (balise <a>)
+  - Couleur et effet au survol
+*/
 a {
   font-weight: 500;
   color: #646cff;
@@ -22,19 +31,35 @@ a:hover {
   color: #535bf2;
 }
 
+/*
+  Styles globaux pour le body
+  - Police de secours pour compatibilité
+  - Lissage des polices
+  - Fond sombre et texte clair
+*/
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #121212;
+  color: #f5f5f5;
 }
 
+/*
+  Style des titres principaux
+*/
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
 
+/*
+  Styles des boutons
+  - Apparence moderne, coins arrondis, effet au survol et focus
+*/
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -54,6 +79,9 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/*
+  Styles spécifiques pour le mode clair (préférence utilisateur)
+*/
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -65,4 +93,12 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/*
+  Style pour les blocs de code
+*/
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }

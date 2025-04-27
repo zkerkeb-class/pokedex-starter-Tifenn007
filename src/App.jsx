@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// Importation des modules nécessaires de React Router et des composants internes
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import Header from './components/Header/header';
+import './App.css';
+import AppRoutes from "./routes/AppRoutes";
+import { AuthProvider } from './context/AuthContext';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+// Composant qui gère le contenu principal de l'application
+const AppContent = () => {
+  // Récupère la localisation actuelle (URL) grâce à React Router
+  const location = useLocation();
+  // Vérifie si l'utilisateur est sur la page d'accueil
+  const isHomePage = location.pathname === '/';
+  
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    // Conteneur principal avec une classe CSS pour le style
+    <div className="app">
+      {/* Affiche le Header, en passant l'info si on est sur la page d'accueil */}
+      <Header isHomePage={isHomePage} />
+      {/* Affiche les routes de l'application (pages) */}
+      <AppRoutes />
+    </div>
+  );
+};
 
-export default App
+// Composant principal qui englobe toute l'application
+function App() {
+  return (
+    // Router permet la navigation entre les pages sans recharger la page
+    <Router>
+      {/* AuthProvider permet de partager l'état d'authentification à tous les composants */}
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </Router>
+  );
+};
+
+export default App;

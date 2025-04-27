@@ -1,0 +1,265 @@
+/* Header en mode plein écran, fixé en haut de la page */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('../../assets/screen2.jpg') no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden;
+  will-change: transform; /* Optimisation des performances */
+}
+
+/* Conteneur du contenu du header (logo, texte, etc.) */
+.header-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  will-change: transform; /* Optimisation des performances */
+}
+
+/* Bandeau contenant les orbes et le texte d'incitation */
+.orbes-container {
+  display: flex;
+  align-items: center; /* Aligne verticalement l'image et le texte */
+}
+
+/* Image d'orbe */
+.orbes-image {
+  width: 60px; 
+  height: auto; 
+  margin-right: 1px; 
+}
+
+/* Logo principal centré et animé */
+.PokeEmpire {
+  width: 250px;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  will-change: transform; /* Optimisation des performances */
+}
+
+/* Texte d'accueil animé en bas du header */
+.header-text {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  max-width: 800px;
+  padding: 0 20px;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  will-change: transform, opacity; /* Optimisation des performances */
+}
+
+.header-welcome-title {
+  font-size: 2.5rem;
+  top: 20%;
+}
+
+/* Description sous le titre */
+.header-description {
+  font-size: 1.4rem;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-weight: 300;
+}
+
+/* Bouton pour explorer les Pokémon */
+.explore-button {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff4d4d, #ff3333);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), 
+              box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  will-change: transform, box-shadow; /* Optimisation des performances */
+}
+
+.explore-button:hover {
+  background: linear-gradient(135deg, #ff3333, #ff1a1a);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
+}
+
+/* Conteneur des boutons d'authentification (connexion, inscription, profil) */
+.auth-buttons {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: flex;
+  gap: 15px;
+  z-index: 1001;
+  opacity: 0;
+  animation: fadeIn 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  will-change: opacity; /* Optimisation des performances */
+}
+
+/* Style général des boutons d'authentification */
+.auth-button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), 
+              background-color 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  will-change: transform, background-color; /* Optimisation des performances */
+}
+
+/* Bouton Connexion (fond transparent) */
+.login-button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.login-button:hover {
+  background-color: white;
+  color: #333;
+  border-color: white;
+  transform: translateY(-2px);
+}
+
+/* Bouton Inscription (fond dégradé rouge) */
+.register-button {
+  background: linear-gradient(135deg, #ff4d4d, #ff3333);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+}
+
+.register-button:hover {
+  background: linear-gradient(135deg, #ff3333, #ff1a1a);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
+}
+
+/* Affichage de l'email de l'utilisateur connecté */
+.user-email {
+  color: white;
+  margin-right: 15px;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Bouton de déconnexion */
+.logout-button {
+  background: linear-gradient(135deg, #ff4d4d, #ff3333);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+}
+
+.logout-button:hover {
+  background: linear-gradient(135deg, #ff3333, #ff1a1a);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
+}
+
+/* Animations d'apparition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Responsive : adapte le header sur mobile */
+@media (max-width: 768px) {
+  .header {
+    height: 60vh;
+  }
+  .PokeEmpire {
+    width: 150px;
+    top: 20px;
+  }
+  .header-description {
+    font-size: 1rem;
+  }
+  .explore-button {
+    padding: 10px 20px;
+    font-size: 0.8rem;
+  }
+  .auth-buttons {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+/* Compteur d'orbes (bonus utilisateur) */
+.orbes-counter {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 5px 15px;
+  margin-right: 10px;
+}
+
+.orbes-counter .orbes-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.orbes-counter span {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* Lien maison (accueil) */
+.home-link {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 1002;
+  background: rgba(0,0,0,0.2);
+  border-radius: 50%;
+  padding: 8px;
+  transition: background 0.2s;
+}
+
+.home-link:hover {
+  background: rgba(0,0,0,0.4);
+}

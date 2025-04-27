@@ -1,0 +1,332 @@
+/* Conteneur principal de la page d'accueil */
+.home-container {
+  padding: 2rem; /* Espace intérieur autour du contenu */
+  max-width: 1800px; /* Largeur maximale de la page */
+  margin: 0 auto; /* Centre la page horizontalement */
+  padding-top: 80vh; /* Décale le contenu sous le header animé (80% de la hauteur de la fenêtre) */
+  box-sizing: border-box; /* Inclut le padding dans la largeur totale */
+  overflow-x: hidden; /* Empêche le scroll horizontal */
+}
+
+/* Section d'introduction en haut de la page */
+.intro-section {
+  text-align: center; /* Centre le texte */
+  margin-bottom: 2rem; /* Espace sous la section */
+  padding: 2rem; /* Espace intérieur */
+  background-color: #1e1e1e; /* Fond sombre */
+  border-radius: 1rem; /* Bords arrondis */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Ombre portée */
+}
+
+.intro-section h2 {
+  font-size: 2.5rem; /* Taille du titre */
+  color: #f5f5f5; /* Couleur claire */
+  margin-bottom: 1.5rem; /* Espace sous le titre */
+}
+
+.red-text {
+  color: #ff4d4d; /* Texte rouge pour mettre en avant */
+}
+
+.intro-section p {
+  font-size: 1.2rem; /* Taille du texte */
+  color: #b0b0b0; /* Gris clair */
+  max-width: 800px; /* Largeur max du paragraphe */
+  margin: 0 auto; /* Centre le paragraphe */
+  line-height: 1.6; /* Hauteur de ligne pour la lisibilité */
+}
+
+/* Section de filtrage et recherche */
+.filter-section {
+  margin-bottom: 3rem; /* Espace sous la section */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Grille de filtres (type, recherche, prix, disponibilité) */
+.filter-search-container {
+  display: grid; /* Utilise CSS Grid pour l'agencement */
+  grid-template-columns: 1fr 1fr; /* Deux colonnes égales */
+  gap: 1rem; /* Espace entre les colonnes */
+  margin-bottom: 1.5rem; /* Espace sous la grille */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-container, .search-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Empile les éléments verticalement */
+  align-items: center; /* Centre horizontalement */
+  background-color: #1e1e1e; /* Fond sombre */
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+}
+
+.filter-container h3, .search-container h3 {
+  font-size: 1.6rem;
+  color: #f5f5f5;
+  margin-bottom: 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+/* Filtres de type de Pokémon (boutons) */
+.type-filters {
+  display: flex;
+  flex-wrap: wrap; /* Retour à la ligne si trop de boutons */
+  gap: 0.8rem; /* Espace entre les boutons */
+  justify-content: center;
+  width: 100%;
+}
+
+.type-button {
+  padding: 0.8rem 1.2rem; /* Espace intérieur du bouton */
+  border-radius: 2rem; /* Bords très arrondis */
+  border: none; /* Pas de bordure */
+  background-color: #2d2d2d; /* Fond sombre */
+  color: #f5f5f5; /* Texte clair */
+  font-weight: 500;
+  cursor: pointer; /* Curseur main au survol */
+  transition: all 0.3s ease; /* Animation douce sur tous les changements */
+}
+
+.type-button:hover {
+  background-color: #3d3d3d; /* Fond plus clair au survol */
+  transform: translateY(-2px); /* Légère élévation */
+}
+
+.type-button.active {
+  background-color: #ff4d4d; /* Fond rouge si actif */
+  color: white;
+}
+
+/* Section des Pokémon (grille de cartes) */
+.pokemon-section {
+  margin-bottom: 3rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between; /* Titre à gauche, bouton à droite */
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h3 {
+  font-size: 1.8rem;
+  color: #f5f5f5;
+}
+
+/* Bouton pour créer un nouveau Pokémon (admin uniquement) */
+.create-button {
+  padding: 0.8rem 1.5rem;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.create-button:hover {
+  background-color: #ff3333;
+  transform: translateY(-2px);
+}
+
+/* Grille de cartes Pokémon */
+.pokemon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes égales */
+  gap: 2rem; /* Espace entre les cartes */
+}
+
+.pokemon-card {
+  background-color: #1e1e1e;
+  border-radius: 1rem;
+  overflow: hidden; /* Cache le débordement des images */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px); /* Légère élévation au survol */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+}
+
+.pokemon-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* L'image remplit le cadre sans déformation */
+}
+
+.pokemon-info {
+  padding: 1.5rem;
+}
+
+.pokemon-name {
+  font-size: 1.2rem;
+  color: #f5f5f5;
+  margin-bottom: 1rem;
+}
+
+.pokemon-link {
+  text-decoration: none; /* Pas de soulignement */
+  color: inherit; /* Garde la couleur du parent */
+}
+
+.pokemon-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pokemon-type {
+  padding: 0.4rem 0.8rem;
+  border-radius: 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+}
+
+/* Couleurs des types de Pokémon (pour chaque type) */
+.normal { background-color: #A8A878; }
+.fire { background-color: #F08030; }
+.water { background-color: #6890F0; }
+.electric { background-color: #F8D030; }
+.grass { background-color: #78C850; }
+.ice { background-color: #98D8D8; }
+.fighting { background-color: #C03028; }
+.poison { background-color: #A040A0; }
+.ground { background-color: #E0C068; }
+.flying { background-color: #A890F0; }
+.psychic { background-color: #F85888; }
+.bug { background-color: #A8B820; }
+.rock { background-color: #B8A038; }
+.ghost { background-color: #705898; }
+.dragon { background-color: #7038F8; }
+.dark { background-color: #705848; }
+.steel { background-color: #B8B8D0; }
+.fairy { background-color: #EE99AC; }
+
+/* États de chargement et d'erreur */
+.loading, .error {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #f5f5f5;
+}
+
+.error {
+  color: #ff4d4d;
+}
+
+/* Bandeau d'orbes d'accueil (bonus d'inscription) */
+.orbes-container {
+  display: flex;
+  align-items: center; /* Centre verticalement l'image et le texte */
+  justify-content: center;
+}
+
+.orbes-image {
+  width: 60px; /* Taille de l'image d'orbe */
+  height: auto; /* Garde le ratio */
+  margin-right: 1px; /* Espace entre l'image et le texte */
+}
+
+/* Responsive : adaptation mobile */
+@media (max-width: 768px) {
+  .home-container {
+    padding-top: 2rem; /* Moins d'espace au-dessus sur mobile */
+    padding: 1.5rem;
+  }
+  .intro-section h2 {
+    font-size: 2rem;
+  }
+  .filter-search-container {
+    grid-template-columns: 1fr; /* Une seule colonne sur mobile */
+  }
+  .section-header {
+    flex-direction: column; /* Titre et bouton l'un sous l'autre */
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .pokemon-grid {
+    grid-template-columns: 1fr; /* Une seule carte par ligne */
+  }
+}
+
+/* Styles pour le bouton Acheter/Possédé */
+.buy-button {
+  background: none; /* Pas de fond */
+  border: none; /* Pas de bordure */
+  color: #FFD700; /* Jaune pour attirer l'œil */
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.buy-button:hover:not(:disabled) {
+  color: #FFF; /* Blanc au survol si activé */
+}
+
+.buy-button:disabled {
+  color: #FF4D4D; /* Rouge si déjà possédé */
+  cursor: not-allowed;
+}
+
+/* Styles pour bouton Vendre */
+.sell-button {
+  background: none;
+  border: none;
+  color: #4dff5c; /* Vert pour la vente */
+  font-weight: bold;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.sell-button:hover {
+  color: #FFF; /* Blanc au survol */
+}
+
+/* Styles pour filtre de prix (input) */
+.price-filter input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+/* Styles pour filtre de disponibilité */
+.availability-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.availability-filter .availability-button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  border: none;
+  background-color: #2d2d2d;
+  color: #f5f5f5;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 0.3rem;
+  transition: all 0.3s ease;
+}
+.availability-filter .availability-button.active {
+  background-color: #ff4d4d;
+  color: white;
+}
+.availability-filter .availability-button:hover {
+  background-color: #3d3d3d;
+  transform: translateY(-1px);
+}
+

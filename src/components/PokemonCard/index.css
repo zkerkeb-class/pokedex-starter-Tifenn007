@@ -1,0 +1,166 @@
+/* Carte principale du Pokémon */
+.pokemon-card {
+  background: radial-gradient(circle at 60% 40%, #181c24 60%, #11141a 100%);
+  border-radius: 2rem;
+  box-shadow:
+    0 0 16px 2px rgba(255, 77, 77, 0.25),
+    0 8px 32px 0 rgba(31, 38, 135, 0.25);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 270px;
+  max-width: 320px;
+  margin: 0 auto;
+  position: relative;
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow:
+    0 0 32px 8px rgba(255, 77, 77, 0.55),
+    0 16px 40px 0 rgba(31, 38, 135, 0.35);
+}
+
+/* Image principale du Pokémon */
+.pokemon-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  z-index: 2;
+}
+
+.pokemon-name {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin: 0.5rem 0 1rem 0;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 8px #0008;
+}
+
+/* Affichage des types du Pokémon */
+.pokemon-types {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.pokemon-type {
+  padding: 0.4rem 1.2rem;
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 2px 8px #0002;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: #444;
+}
+
+/* Couleurs spécifiques pour chaque type de Pokémon */
+.pokemon-type.grass { background: #4caf50; }
+.pokemon-type.poison { background: #a259c6; }
+.pokemon-type.fire { background: #ff9800; }
+.pokemon-type.water { background: #2196f3; }
+.pokemon-type.electric { background: #ffd600; color: #333; }
+.pokemon-type.ice { background: #00bcd4; }
+.pokemon-type.fighting { background: #d32f2f; }
+.pokemon-type.ground { background: #bcaaa4; color: #333; }
+.pokemon-type.flying { background: #90caf9; color: #333; }
+.pokemon-type.psychic { background: #f06292; }
+.pokemon-type.bug { background: #8bc34a; color: #333; }
+.pokemon-type.rock { background: #a1887f; color: #333; }
+.pokemon-type.ghost { background: #7e57c2; }
+.pokemon-type.dragon { background: #1976d2; }
+.pokemon-type.steel { background: #b0bec5; color: #333; }
+.pokemon-type.fairy { background: #f8bbd0; color: #333; }
+.pokemon-type.normal { background: #bdbdbd; color: #333; }
+
+.pokemon-info-extra {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1.2rem;
+  gap: 1.5rem;
+}
+
+.pokemon-info-extra .info-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.pokemon-info-extra .info-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.pokemon-info-extra .info-label {
+  font-size: 0.9rem;
+  color: #b0b0b0;
+  letter-spacing: 1px;
+}
+
+/* Boutons d'achat et de vente */
+.buy-button, .sell-button {
+  margin-top: 1.5rem;
+  width: 90%;
+  padding: 0.7rem 0;
+  border-radius: 1rem;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px #0002;
+}
+
+.buy-button {
+  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+  color: #222;
+}
+
+.buy-button:disabled {
+  background: #bdbdbd;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.sell-button {
+  background: linear-gradient(90deg, #ff5858 0%, #f09819 100%);
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .pokemon-card {
+    width: 100vw;
+    box-sizing: border-box;
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    min-width: unset;
+    max-width: unset;
+  }
+  .pokemon-image {
+    width: 100px;
+    height: 100px;
+    margin-top: 0;
+  }
+}
+
+/* Image détaillée du Pokémon */
+.pokemon-detail-image {
+  width: 170px;
+  height: 170px;
+  object-fit: contain;
+  background: #222;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}

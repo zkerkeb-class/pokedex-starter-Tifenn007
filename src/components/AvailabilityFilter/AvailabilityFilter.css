@@ -1,0 +1,41 @@
+/* Styles pour le composant AvailabilityFilter */
+
+/* Conteneur principal du filtre de disponibilité */
+.availability-filter {
+  display: flex; /* Utilise Flexbox pour l'agencement */
+  flex-direction: column; /* Les éléments enfants sont empilés en colonne */
+  align-items: center; /* Centre les éléments horizontalement */
+}
+
+/* Conteneur des boutons d'options de disponibilité */
+.availability-options {
+  display: flex; /* Affiche les boutons sur une ligne */
+  flex-wrap: wrap; /* Permet le retour à la ligne si nécessaire */
+  justify-content: center; /* Centre les boutons horizontalement */
+  gap: 0.5rem; /* Espace entre les boutons */
+  margin-top: 0.5rem; /* Marge au-dessus des boutons */
+}
+
+/* Style de base pour chaque bouton de disponibilité */
+.availability-filter .availability-button {
+  padding: 0.6rem 1.2rem; /* Espacement interne du bouton */
+  border-radius: 2rem; /* Bords arrondis */
+  border: none; /* Pas de bordure */
+  background-color: #2d2d2d; /* Couleur de fond par défaut */
+  color: #f5f5f5; /* Couleur du texte */
+  font-weight: 500; /* Texte en semi-gras */
+  cursor: pointer; /* Curseur pointeur au survol */
+  transition: all 0.3s ease; /* Animation douce lors des changements */
+}
+
+/* Style appliqué au bouton actif (sélectionné) */
+.availability-filter .availability-button.active {
+  background-color: #ff4d4d; /* Fond rouge pour le bouton actif */
+  color: white; /* Texte blanc */
+}
+
+/* Effet au survol des boutons */
+.availability-filter .availability-button:hover {
+  background-color: #3d3d3d; /* Fond légèrement plus clair au survol */
+  transform: translateY(-1px); /* Légère élévation du bouton */
+} 

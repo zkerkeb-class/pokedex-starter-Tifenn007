@@ -1,0 +1,59 @@
+/* Styles pour le composant PriceFilter */
+.price-filter {
+  /* Espacement autour du slider */
+  padding: 0.5rem 0;
+}
+
+/* Slider rc-slider intégré */
+.price-filter .rc-slider {
+  margin: 0.5rem 0;
+}
+
+/* Affichage des valeurs min et max sélectionnées */
+.price-filter .price-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+  color: #c0392b;
+}
+.price-filter .price-values span {
+  font-weight: bold;
+}
+
+/* Barre de fond du slider */
+.price-filter .rc-slider-rail {
+  background-color: #eee;
+  height: 8px;
+  border-radius: 4px;
+}
+/* Barre active du slider (plage sélectionnée) */
+.price-filter .rc-slider-track {
+  background-color: #e74c3c;
+  height: 8px;
+  border-radius: 4px;
+}
+/* Poignées personnalisées du slider */
+.price-filter .rc-slider-handle {
+  border: 2px solid #e74c3c;
+  background-color: #fff;
+  width: 16px;
+  height: 16px;
+  margin-top: -4px;
+  box-shadow: none;
+}
+.price-filter .rc-slider-handle:hover,
+.price-filter .rc-slider-handle:focus {
+  border-color: #c0392b;
+  box-shadow: 0 0 5px rgba(224, 57, 57, 0.5);
+}
+
+.price-filter input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  box-sizing: border-box;
+  font-size: 1rem;
+} 
