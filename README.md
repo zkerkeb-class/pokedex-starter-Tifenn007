@@ -1,4 +1,7 @@
+
 # Pokedex Starter
+
+[🎬 Vidéo de présentation du projet](https://youtu.be/-YWAYLjBHYc)
 
 ## Description du projet
 
@@ -173,9 +176,6 @@ PokeEmpire est une application web moderne développée avec React et Vite, perm
 
 ---
 
-## Contribution
-
-Les contributions sont les bienvenues ! Ouvrez une issue ou une pull request pour toute suggestion ou correction.
 
 ## Licence
 
