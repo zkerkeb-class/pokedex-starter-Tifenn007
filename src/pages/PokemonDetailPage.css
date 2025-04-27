@@ -1,12 +1,13 @@
+/* Carte principale de détail du Pokémon */
 .pokemon-detail-card {
-  background: linear-gradient(135deg, #232526 0%, #414345 100%);
-  border-radius: 2rem;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  background: linear-gradient(135deg, #232526 0%, #414345 100%); /* Dégradé de fond */
+  border-radius: 2rem; /* Bords arrondis */
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Ombre portée */
   color: #fff;
-  max-width: 540px;
-  min-width: 400px;
-  margin: 3rem auto;
-  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  max-width: 540px; /* Largeur max de la carte */
+  min-width: 400px; /* Largeur min pour éviter l'écrasement */
+  margin: 3rem auto; /* Centre la carte verticalement et horizontalement */
+  padding: 2.5rem 2.5rem 2rem 2.5rem; /* Espace intérieur (haut, droite, bas, gauche) */
   position: relative;
   font-family: 'Segoe UI', Arial, sans-serif;
   display: flex;
@@ -14,6 +15,7 @@
   align-items: center;
 }
 
+/* Bouton pour fermer la fiche (croix en haut à droite) */
 .close-btn {
   position: absolute;
   top: 1.5rem;
@@ -21,7 +23,7 @@
   background: #ff4d4d;
   color: #fff;
   border: none;
-  border-radius: 50%;
+  border-radius: 50%; /* bouton rond */
   width: 2.2rem;
   height: 2.2rem;
   font-size: 1.7rem;
@@ -36,10 +38,11 @@
   background: #ff1a1a;
 }
 
+/* En-tête de la fiche (image + noms) */
 .pokemon-detail-header {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 2.5rem; /* Espace entre l'image et les noms */
   margin-bottom: 2rem;
   width: 100%;
   justify-content: center;
@@ -47,7 +50,7 @@
 .pokemon-detail-image {
   width: 170px;
   height: 170px;
-  object-fit: contain;
+  object-fit: contain; /* L'image garde son ratio sans déborder */
   background: #222;
   border-radius: 1.5rem;
   box-shadow: 0 4px 16px rgba(0,0,0,0.3);
@@ -61,7 +64,7 @@
 .pokemon-detail-names h1 {
   font-size: 2.3rem;
   margin: 0 0 0.7rem 0;
-  color: #ffb347;
+  color: #ffb347; /* Jaune/orangé pour le nom principal */
 }
 .pokemon-detail-names p {
   margin: 0;
@@ -112,13 +115,14 @@ ground { background-color: #E0C068; }
 flying { background-color: #A890F0; }
 psychic { background-color: #F85888; }
 bug { background-color: #A8B820; }
-rock { background-color: #B8A038; }
+.rock { background-color: #B8A038; }
 ghost { background-color: #705898; }
 dragon { background-color: #7038F8; }
 dark { background-color: #705848; }
 .steel { background-color: #B8B8D0; }
 fairy { background-color: #EE99AC; }
 
+/* Bloc des statistiques (barres de progression) */
 .pokemon-detail-stats {
   display: flex;
   flex-direction: column;
@@ -139,11 +143,11 @@ fairy { background-color: #EE99AC; }
 .stat-bar {
   background: #222;
   border-radius: 1rem;
-  width: 180px;
-  height: 16px;
-  overflow: hidden;
+  width: 180px; /* Largeur de la barre de progression */
+  height: 16px; /* Hauteur de la barre */
+  overflow: hidden; /* Cache le débordement de la barre colorée */
   margin: 0 0.7rem;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Empêche la barre de rétrécir */
 }
 .stat-row > span:last-child {
   min-width: 40px;
@@ -153,8 +157,9 @@ fairy { background-color: #EE99AC; }
 .stat-fill {
   height: 100%;
   border-radius: 1rem;
-  transition: width 0.4s;
+  transition: width 0.4s; /* Animation douce de la largeur */
 }
+/* Couleurs spécifiques pour chaque statistique */
 .stat-fill.hp { background: #ff5959; }
 .stat-fill.attack { background: #f5ac78; }
 .stat-fill.defense { background: #fae078; }
@@ -162,6 +167,7 @@ fairy { background-color: #EE99AC; }
 .stat-fill.sp-defense { background: #a7db8d; }
 .stat-fill.speed { background: #fa92b2; }
 
+/* Actions d'administration (boutons supprimer/modifier) */
 .pokemon-detail-actions {
   justify-content: flex-end;
   gap: 1rem;

@@ -1,3 +1,9 @@
+/*
+  Styles globaux pour le body et le html
+  - On enlève les marges et paddings par défaut
+  - On force la largeur et la hauteur à 100% pour occuper tout l'écran
+  - On centre le texte et on applique un fond sombre
+*/
 body, html {
   margin: 0;
   padding: 0;
@@ -8,6 +14,15 @@ body, html {
   color: #f5f5f5;
 }
 
+/*
+  Classe principale de l'application
+  - max-width et width pour limiter la largeur de l'app et la centrer
+  - margin: 0 auto pour centrer horizontalement
+  - padding pour l'espace intérieur
+  - padding-top pour laisser de la place en haut (ex: pour le header)
+  - box-sizing: border-box pour inclure le padding dans la largeur
+  - background-color pour garder le fond sombre
+*/
 .app {
   max-width: 75%; 
   width: 75%;

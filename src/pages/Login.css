@@ -1,27 +1,29 @@
 /* Styles pour Login */
+/* Conteneur principal de la page de connexion (plein écran, centré) */
 .auth-container {
-  position: fixed; /* reste fixe dans la fenêtre */
+  position: fixed; /* reste fixe dans la fenêtre, recouvre tout */
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100vh; /* prend toute la hauteur de la fenêtre */
   display: flex;
-  flex-direction: column;  /* main axis vertical */
+  flex-direction: column;  /* axe principal vertical */
   justify-content: center; /* centre verticalement */
   align-items: center;  /* centre horizontalement */
-  background: #121212;
+  background: #121212; /* fond sombre */
   padding: 0; /* supprime tout padding interne */
   box-sizing: border-box;
 }
 
+/* Carte de connexion (le bloc central) */
 .auth-card {
   margin-top: 0;  /* pas de marge supplémentaire */
   width: 100%;
-  max-width: 400px;
-  background: #1e1e1e;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  max-width: 400px; /* largeur max de la carte */
+  background: #1e1e1e; /* fond plus clair que le fond général */
+  padding: 1.5rem; /* espace intérieur */
+  border-radius: 1rem; /* bords arrondis */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5); /* ombre portée */
 }
 
 .auth-card h2 {
@@ -31,22 +33,24 @@
   font-size: 1.8rem;
 }
 
+/* Champs de saisie du formulaire */
 .auth-card input {
   width: 100%;
   padding: 0.8rem 1rem;
   margin-bottom: 0.8rem;
-  background: #2d2d2d;
-  color: #f5f5f5;
+  background: #2d2d2d; /* fond sombre */
+  color: #f5f5f5; /* texte clair */
   border: none;
   border-radius: 0.5rem;
   font-size: 1rem;
   box-sizing: border-box;
 }
 
+/* Bouton de connexion */
 .auth-card button {
   width: 100%;
   padding: 0.8rem;
-  background: #e74c3c;
+  background: #e74c3c; /* rouge vif */
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -57,18 +61,20 @@
 }
 
 .auth-card button:hover {
-  background: #c0392b;
+  background: #c0392b; /* rouge plus foncé au survol */
 }
 
+/* Message d'erreur en cas d'échec de connexion */
 .error-alert {
-  background: #ffdddd;
-  color: #d8000c;
+  background: #ffdddd; /* fond rouge très clair */
+  color: #d8000c; /* texte rouge vif */
   padding: 0.6rem;
   border-radius: 0.5rem;
   margin-bottom: 0.8rem;
   text-align: center;
 }
 
+/* Lien vers l'inscription */
 .auth-link {
   text-align: center;
   margin-top: 0.5rem;
@@ -76,11 +82,11 @@
 }
 
 .auth-link a {
-  color: #e74c3c;
+  color: #e74c3c; /* rouge vif */
   text-decoration: none;
   font-weight: bold;
 }
 
 .auth-link a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* soulignement au survol */
 } 

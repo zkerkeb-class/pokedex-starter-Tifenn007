@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPokemonById, updatePokemon } from '../services/api';
+import { getPokemonById, updatePokemon } from '../services/api/pokemonApi';
 import { useAuth } from '../context/AuthContext';
 
+// Liste des types possibles pour un Pokémon
 const allTypes = [
   'normal','fire','water','electric','grass','ice',
   'fighting','poison','ground','flying','psychic','bug',
   'rock','ghost','dragon','steel','fairy'
 ];
 
+// Page permettant de modifier un Pokémon existant
 const EditPokemonPage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id } = useParams(); // Récupère l'id du Pokémon dans l'URL
+  const navigate = useNavigate(); // Pour rediriger après modification
+  // État du Pokémon à éditer
   const [editedPokemon, setEditedPokemon] = useState({
     id: '',
     name: { english: '', japanese: '', chinese: '', french: '' },
@@ -23,11 +26,12 @@ const EditPokemonPage = () => {
     evolutions: [],
     image: ''
   });
-  const [imageFile, setImageFile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { user } = useAuth();
+  const [imageFile, setImageFile] = useState(null); // Nouvelle image sélectionnée
+  const [loading, setLoading] = useState(true); // Indique si la page charge
+  const [error, setError] = useState(null); // Message d'erreur éventuel
+  const { user } = useAuth(); // Utilisateur connecté
 
+  // Au chargement, on récupère les infos du Pokémon à éditer
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
@@ -50,6 +54,7 @@ const EditPokemonPage = () => {
     fetchPokemon();
   }, [id]);
 
+  // Gestion des changements dans les champs du formulaire
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith('name.')) {
@@ -71,6 +76,7 @@ const EditPokemonPage = () => {
     }
   };
 
+  // Gestion des cases à cocher pour les types
   const handleTypeCheckboxChange = (e) => {
     const { value, checked } = e.target;
     setEditedPokemon(prev => {
@@ -81,14 +87,17 @@ const EditPokemonPage = () => {
     });
   };
 
+  // Gestion de l'image sélectionnée
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) setImageFile(file);
   };
 
+  // Soumission du formulaire pour mettre à jour le Pokémon
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     let payload;
+    // Si une nouvelle image est sélectionnée, on prépare un FormData
     if (imageFile) {
       payload = new FormData();
       payload.append('id', editedPokemon.id);
@@ -99,6 +108,7 @@ const EditPokemonPage = () => {
       editedPokemon.evolutions.forEach(evo => payload.append('evolutions', evo));
       payload.append('image', imageFile);
     } else {
+      // Sinon, on envoie un objet classique
       payload = {
         id: editedPokemon.id,
         name: editedPokemon.name,
@@ -110,8 +120,8 @@ const EditPokemonPage = () => {
       };
     }
     try {
-      await updatePokemon(id, payload, user?.token);
-      navigate(`/pokemons/${id}`);
+      await updatePokemon(id, payload, user?.token); // Appel API pour mettre à jour
+      navigate(`/pokemons/${id}`); // Redirige vers la fiche du Pokémon
     } catch (error) {
       setError(error);
     }
@@ -127,6 +137,7 @@ const EditPokemonPage = () => {
       <input type="number" name="id" value={editedPokemon.id} readOnly />
 
       <h2>Noms</h2>
+      {/* Champs pour les différents noms du Pokémon */}
       {['english', 'japanese', 'chinese', 'french'].map((lang) => (
         <input
           key={lang}
@@ -140,6 +151,7 @@ const EditPokemonPage = () => {
 
       <h2>Types</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '1rem' }}>
+        {/* Cases à cocher pour chaque type possible */}
         {allTypes.map(type => (
           <label key={type} style={{ marginRight: '1rem', cursor: 'pointer' }}>
             <input
@@ -155,6 +167,7 @@ const EditPokemonPage = () => {
       </div>
 
       <h2>Stats</h2>
+      {/* Champs pour chaque statistique du Pokémon */}
       <label htmlFor="stats-hp">HP</label>
       <input
         id="stats-hp"
@@ -234,6 +247,7 @@ const EditPokemonPage = () => {
         accept="image/*"
         onChange={handleImageChange}
       />
+      {/* Affichage d'un aperçu de la nouvelle image sélectionnée ou de l'image actuelle */}
       {imageFile && (
         <img
           src={URL.createObjectURL(imageFile)}

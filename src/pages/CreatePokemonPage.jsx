@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createPokemon, getAllPokemons } from '../services/api';
+import { createPokemon, getAllPokemons } from '../services/api/pokemonApi';
 import { useAuth } from '../context/AuthContext';
 
+// Page permettant à un utilisateur de créer un nouveau Pokémon
 const CreatePokemonPage = () => {
+  // État du formulaire pour stocker les infos du Pokémon à créer
   const [formData, setFormData] = useState({
     id: '',
     name: {
@@ -25,19 +27,20 @@ const CreatePokemonPage = () => {
     evolutions: [],
   });
 
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { user } = useAuth();
-  const [imageFile, setImageFile] = useState(null);
+  const [error, setError] = useState(null); // Message d'erreur éventuel
+  const [loading, setLoading] = useState(false); // Indique si la création est en cours
+  const navigate = useNavigate(); // Pour rediriger après création
+  const { user } = useAuth(); // Utilisateur connecté
+  const [imageFile, setImageFile] = useState(null); // Image sélectionnée
 
-  // Liste des types disponibles
+  // Liste des types disponibles pour le formulaire
   const allTypes = [
     'normal','fire','water','electric','grass','ice',
     'fighting','poison','ground','flying','psychic','bug',
     'rock','ghost','dragon','steel','fairy'
   ];
 
+  // Au chargement, on récupère tous les Pokémon pour générer un nouvel id unique
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
@@ -55,10 +58,10 @@ const CreatePokemonPage = () => {
         // On ne définit pas d'erreur pour éviter l'affichage
       }
     };
-
     fetchPokemons();
   }, []);
 
+  // Soumission du formulaire pour créer le Pokémon
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -79,8 +82,9 @@ const CreatePokemonPage = () => {
         payload.append('price', formData.price);
         formData.evolutions.forEach(evo => payload.append('evolutions', evo));
       }
+      // Appel à l'API pour créer le Pokémon
       const newPokemon = await createPokemon(payload, token);
-      navigate(`/pokemons/${newPokemon._id}`);
+      navigate(`/pokemons/${newPokemon._id}`); // Redirige vers la fiche du nouveau Pokémon
     } catch (error) {
       console.error('Erreur création Pokémon :', error);
       setError('Échec lors de la création du Pokémon');
@@ -89,6 +93,7 @@ const CreatePokemonPage = () => {
     }
   };
 
+  // Gestion des changements dans les champs du formulaire
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -112,7 +117,7 @@ const CreatePokemonPage = () => {
     }
   };
 
-  // Handler pour les cases à cocher des types
+  // Gestion des cases à cocher pour les types
   const handleTypeCheckboxChange = (e) => {
     const { value, checked } = e.target;
     setFormData(prev => {
@@ -123,6 +128,7 @@ const CreatePokemonPage = () => {
     });
   };
 
+  // Gestion de l'image sélectionnée
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) setImageFile(file);
@@ -137,6 +143,7 @@ const CreatePokemonPage = () => {
         <input type="number" value={formData.id} readOnly />
 
         <h2>Noms</h2>
+        {/* Champs pour les différents noms du Pokémon */}
         {['english', 'japanese', 'chinese', 'french'].map((lang) => (
           <input
             key={lang}
@@ -150,6 +157,7 @@ const CreatePokemonPage = () => {
 
         <h2>Types</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '1rem' }}>
+          {/* Cases à cocher pour chaque type possible */}
           {allTypes.map(type => (
             <label key={type} style={{ marginRight: '1rem', cursor: 'pointer' }}>
               <input
@@ -165,6 +173,7 @@ const CreatePokemonPage = () => {
         </div>
 
         <h2>Stats</h2>
+        {/* Champs pour chaque statistique du Pokémon */}
         <label htmlFor="stats-hp">HP</label>
         <input
           id="stats-hp"
@@ -244,6 +253,7 @@ const CreatePokemonPage = () => {
           accept="image/*"
           onChange={handleImageChange}
         />
+        {/* Affichage d'un aperçu de l'image sélectionnée */}
         {imageFile && (
           <img
             src={URL.createObjectURL(imageFile)}

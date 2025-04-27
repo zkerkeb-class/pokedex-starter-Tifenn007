@@ -2,24 +2,28 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import OrbesCounter from '../components/OrbesCounter';
 import './ProfilePage.css';
-import { useParams, Link } from 'react-router-dom';
-import { getCurrentUserData, sellPokemon, getAllQuests, getQuestsStatus, createQuest, updateQuest, deleteQuest, claimDailyReward, deactivateQuest, activateQuest, claimQuestReward } from '../services/api';
+import { useParams } from 'react-router-dom';
+import { getCurrentUserData, sellPokemon, getQuestsStatus, claimDailyReward } from '../services/api/userApi';
+import { getAllQuests, createQuest, updateQuest, deleteQuest, deactivateQuest, activateQuest, claimQuestReward } from '../services/api/questApi';
 import authService from '../services/authService';
 import Orbes from '../assets/orbes.png';
+import PokemonCard from '../components/PokemonCard';
 
 function ProfilePage() {
   const { username } = useParams();
   const { user, updateUser, loading } = useAuth();
   const isAdmin = user?.role === 'admin';
-  const [arsenal, setArsenal] = useState([]);
+  const [arsenal, setArsenal] = useState([]); // Liste des Pokémon possédés
   const [loadingArsenal, setLoadingArsenal] = useState(false);
   const [errorArsenal, setErrorArsenal] = useState(null);
-  const [questsDef, setQuestsDef] = useState([]);
-  const [questsStat, setQuestsStat] = useState({ dailyRewardClaimed: false, orbesReward: 10, quests: [] });
+  const [questsDef, setQuestsDef] = useState([]); // Définitions des quêtes (admin)
+  const [questsStat, setQuestsStat] = useState({ dailyRewardClaimed: false, orbesReward: 10, quests: [] }); // Statut des quêtes utilisateur
   const [loadingRewards, setLoadingRewards] = useState(false);
   const [errorRewards, setErrorRewards] = useState(null);
+  // Onglet actif : arsenal (Pokémon), profil, ou rewards (quêtes)
   const [activeTab, setActiveTab] = useState(isAdmin ? 'rewards' : 'arsenal');
 
+  // Charge l'arsenal de Pokémon de l'utilisateur (sauf admin)
   useEffect(() => {
     if (!isAdmin && activeTab === 'arsenal') {
       setLoadingArsenal(true);
@@ -30,6 +34,7 @@ function ProfilePage() {
     }
   }, [activeTab]);
 
+  // Charge les quêtes et leur statut (pour l'onglet rewards)
   useEffect(() => {
     if (activeTab === 'rewards') {
       setLoadingRewards(true);
@@ -50,6 +55,7 @@ function ProfilePage() {
   if (loading) return <div>Chargement du profil...</div>;
   if (!user) return <div>Utilisateur non trouvé</div>;
 
+  // Vente d'un Pokémon (utilisateur)
   const handleSell = async (pokemon) => {
     const token = authService.getToken();
     try {
@@ -62,6 +68,7 @@ function ProfilePage() {
     }
   };
 
+  // Récupération de la récompense journalière
   const handleDaily = async () => {
     const token = authService.getToken();
     try {
@@ -73,6 +80,7 @@ function ProfilePage() {
     }
   };
 
+  // Création d'une nouvelle quête (admin)
   const handleCreateQuest = async () => {
     const key = prompt('Clé unique (achat/vente/connexion) :');
     if (!key) return;
@@ -91,6 +99,7 @@ function ProfilePage() {
     }
   };
 
+  // Mise à jour d'une quête (admin)
   const handleUpdateQuest = async (quest) => {
     const name = prompt('Nouveau nom :', quest.name);
     const target = parseInt(prompt('Nouvel objectif :', quest.target), 10);
@@ -107,6 +116,7 @@ function ProfilePage() {
     }
   };
 
+  // Suppression d'une quête (admin)
   const handleDeleteQuest = async (id) => {
     if (!window.confirm('Confirmez-vous la suppression de cette quête ?')) return;
     try {
@@ -120,6 +130,7 @@ function ProfilePage() {
     }
   };
 
+  // Activation/désactivation d'une quête (admin)
   const toggleQuestActive = async (id, active) => {
     try {
       const token = authService.getToken();
@@ -135,6 +146,7 @@ function ProfilePage() {
     }
   };
 
+  // Récupération de la récompense d'une quête (utilisateur)
   const handleClaimQuest = async (questId) => {
     const token = authService.getToken();
     try {
@@ -155,12 +167,15 @@ function ProfilePage() {
   return (
     <div className="profile-container">
       <h2>Profil de {username}</h2>
+      {/* Affiche le compteur d'orbes sauf pour l'admin */}
       {!isAdmin && (
         <div className="profile-orbes-counter">
           <OrbesCounter />
         </div>
       )}
+      {/* Onglets de navigation */}
       <div className="tabs">
+        {/* Onglet Arsenal (Pokémon possédés) */}
         {!isAdmin && (
           <button
             className={activeTab === 'arsenal' ? 'active' : ''}
@@ -169,12 +184,14 @@ function ProfilePage() {
             Mon Arsenal
           </button>
         )}
+        {/* Onglet Profil (infos utilisateur) */}
         <button
           className={activeTab === 'profil' ? 'active' : ''}
           onClick={() => setActiveTab('profil')}
         >
           Mon Profil
         </button>
+        {/* Onglet Récompenses (quêtes et daily) */}
         <button
           className={activeTab === 'rewards' ? 'active' : ''}
           onClick={() => setActiveTab('rewards')}
@@ -183,6 +200,7 @@ function ProfilePage() {
         </button>
       </div>
       <div className="tab-content">
+        {/* Contenu de l'onglet Arsenal */}
         {activeTab === 'arsenal' && !isAdmin && (
           <div>
             <h3>Mon Arsenal de Pokémons</h3>
@@ -191,39 +209,26 @@ function ProfilePage() {
             ) : errorArsenal ? (
               <p className="error">{errorArsenal}</p>
             ) : arsenal.length > 0 ? (
-              <div className="profile-pokemon-grid">
-                {arsenal.map((pokemon) => {
-                  const salePrice = Math.round(pokemon.price * 0.8);
-                  return (
-                    <div key={pokemon._id} className="profile-pokemon-card">
-                      <img src={pokemon.image} alt={pokemon.name.english} className="pokemon-image" />
-                      <div className="pokemon-info">
-                        <Link to={`/pokemons/${pokemon._id}`} className="pokemon-link">
-                          <h2 className="pokemon-name">{pokemon.name.english}</h2>
-                        </Link>
-                        <div className="pokemon-types">
-                          {pokemon.types.map((type, index) => (
-                            <span key={index} className={`pokemon-type ${type.toLowerCase()}`}>
-                              {type.charAt(0).toUpperCase() + type.slice(1)}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <button
-                        className="sell-button"
-                        onClick={() => handleSell(pokemon)}
-                      >
-                        Vendre pour {salePrice} <img src={Orbes} alt="Orbes" style={{ width: '20px', verticalAlign: 'middle' }} />
-                      </button>
-                    </div>
-                  );
-                })}
+              <div className="pokemon-grid">
+                {arsenal.map((pokemon) => (
+                  <PokemonCard
+                    key={pokemon._id}
+                    pokemon={pokemon}
+                    isOwned={true}
+                    isAdmin={false}
+                    user={user}
+                    handleBuy={null}
+                    handleSell={() => handleSell(pokemon)}
+                    isProfilePage={true}
+                  />
+                ))}
               </div>
             ) : (
               <p>Vous n&apos;avez pas de Pokémon dans votre arsenal. Allez les acheter !</p>
             )}
           </div>
         )}
+        {/* Contenu de l'onglet Profil */}
         {activeTab === 'profil' && (
           <div>
             <h3>Informations du profil</h3>
@@ -232,6 +237,7 @@ function ProfilePage() {
             <p>Dernière connexion : {user.derConnect ? new Date(user.derConnect).toLocaleString() : 'Jamais'}</p>
           </div>
         )}
+        {/* Contenu de l'onglet Récompenses (quêtes et daily) */}
         {activeTab === 'rewards' && (
           <div className="rewards-section">
             <h3>Récompenses</h3>
@@ -241,6 +247,7 @@ function ProfilePage() {
               <p className="error">{errorRewards}</p>
             ) : (
               <>
+                {/* Récompense journalière pour l'utilisateur */}
                 {user?.role !== 'admin' && (
                   <section className="daily">
                     <h4>Récompense journalière (+{questsStat.orbesReward} Orbes)</h4>
@@ -253,6 +260,7 @@ function ProfilePage() {
                     )}
                   </section>
                 )}
+                {/* Gestion des quêtes pour l'admin */}
                 {user?.role === 'admin' ? (
                   <div className="rewards-admin">
                     <h4>Gestion des quêtes</h4>
@@ -270,6 +278,7 @@ function ProfilePage() {
                           >
                             Modifier
                           </button>
+                          {/* Switch d'activation/désactivation de la quête */}
                           <label className="switch">
                             <input
                               type="checkbox"
@@ -296,6 +305,7 @@ function ProfilePage() {
                       <p>Aucune quête en cours</p>
                     ) : (
                       questsStat.quests.map((q, idx) => {
+                        // Calcul du pourcentage d'avancement de la quête
                         const percent = Math.min(100, Math.round((q.current / q.target) * 100));
                         return (
                           <div key={q._id || idx} className="quest-item">
@@ -305,6 +315,7 @@ function ProfilePage() {
                                 {q.completed ? 'Terminé' : 'En cours'}
                               </span>
                             </div>
+                            {/* Barre de progression de la quête */}
                             <div className="quest-progress-bar">
                               <div
                                 className="quest-progress-bar-fill"
@@ -314,6 +325,7 @@ function ProfilePage() {
                                 {q.current} / {q.target}
                               </span>
                             </div>
+                            {/* Bouton pour réclamer la récompense si la quête est terminée */}
                             <button
                               className="claim-btn"
                               disabled={!q.completed || q.claimed}

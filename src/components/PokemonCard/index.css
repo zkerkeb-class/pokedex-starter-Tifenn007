@@ -1,3 +1,4 @@
+/* Carte principale du Pokémon */
 .pokemon-card {
   background: radial-gradient(circle at 60% 40%, #181c24 60%, #11141a 100%);
   border-radius: 2rem;
@@ -23,6 +24,7 @@
     0 16px 40px 0 rgba(31, 38, 135, 0.35);
 }
 
+/* Image principale du Pokémon */
 .pokemon-image {
   width: 120px;
   height: 120px;
@@ -42,6 +44,7 @@
   text-shadow: 0 2px 8px #0008;
 }
 
+/* Affichage des types du Pokémon */
 .pokemon-types {
   display: flex;
   gap: 0.7rem;
@@ -61,6 +64,7 @@
   background: #444;
 }
 
+/* Couleurs spécifiques pour chaque type de Pokémon */
 .pokemon-type.grass { background: #4caf50; }
 .pokemon-type.poison { background: #a259c6; }
 .pokemon-type.fire { background: #ff9800; }
@@ -106,6 +110,7 @@
   letter-spacing: 1px;
 }
 
+/* Boutons d'achat et de vente */
 .buy-button, .sell-button {
   margin-top: 1.5rem;
   width: 90%;
@@ -150,6 +155,7 @@
   }
 }
 
+/* Image détaillée du Pokémon */
 .pokemon-detail-image {
   width: 170px;
   height: 170px;

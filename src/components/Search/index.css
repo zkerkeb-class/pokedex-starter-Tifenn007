@@ -1,3 +1,4 @@
+/* Conteneur principal de la barre de recherche */
 .search-wrapper {
   width: 100%;
   max-width: 550px;
@@ -7,6 +8,7 @@
   align-items: center;
 }
 
+/* Champ de saisie de la recherche */
 .search-input {
   width: 100%;
   padding: 0.8rem 1.2rem;
@@ -19,11 +21,13 @@
   color: #f5f5f5;
 }
 
+/* Effet visuel quand le champ est sélectionné */
 .search-input:focus {
   border-color: #ff4d4d;
   box-shadow: 0 0 5px rgba(255, 77, 77, 0.3);
 }
 
+/* Style du texte d'exemple (placeholder) */
 .search-input::placeholder {
   color: #888;
 } 

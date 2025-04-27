@@ -8,12 +8,17 @@ import Register from '../pages/Register';
 import ProfilePage from '../pages/ProfilePage';
 import PrivateRoute from '../components/PrivateRoute';
 
+// Composant qui définit toutes les routes de l'application
 function AppRoutes() {
   return (
     <Routes>
+      {/* Page d'accueil */}
       <Route path="/" element={<Home />} />
+      {/* Page de connexion */}
       <Route path="/login" element={<Login />} />
+      {/* Page d'inscription */}
       <Route path="/register" element={<Register />} />
+      {/* Page de profil (protégée, nécessite d'être connecté) */}
       <Route
         path="/profile/:username"
         element={
@@ -22,7 +27,9 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+      {/* Détail d'un Pokémon (accessible à tous) */}
       <Route path="/pokemons/:id" element={<PokemonDetailPage />} />
+      {/* Création d'un Pokémon (protégée, nécessite d'être connecté) */}
       <Route
         path="/create"
         element={
@@ -31,6 +38,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+      {/* Édition d'un Pokémon (protégée, nécessite d'être connecté) */}
       <Route
         path="/edit/:id"
         element={

@@ -1,3 +1,4 @@
+/* Conteneur principal du compteur d'orbes */
 .orbes-counter {
   display: inline-flex;
   width: auto;
@@ -8,11 +9,13 @@
   border-radius: 8px;
 }
 
+/* Icône d'orbe */
 .orbes-icon {
   width: 20px;
   margin-right: 5px;
 }
 
+/* Nombre d'orbes affiché */
 .orbes-count {
   color: white;
   font-weight: 600;
